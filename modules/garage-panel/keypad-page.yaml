@@ -1,0 +1,135 @@
+substitutions:
+  keypad_page: '1'
+
+binary_sensor:
+  - platform: nextion
+    page_id: ${keypad_page}
+    component_id: 2
+    component_name: keypad.num1
+    id: keypad_num_1
+    on_release:
+      - lambda: id(entered_code) += "1";
+      - script.execute: update_feedback
+
+  - platform: nextion
+    page_id: ${keypad_page}
+    component_id: 3
+    component_name: keypad.num2
+    id: keypad_num_2
+    on_release:
+      - lambda: id(entered_code) += "2";
+      - script.execute: update_feedback
+
+  - platform: nextion
+    page_id: ${keypad_page}
+    component_id: 4
+    component_name: keypad.num3
+    id: keypad_num_3
+    on_release:
+      - lambda: id(entered_code) += "3";
+      - script.execute: update_feedback
+
+  - platform: nextion
+    page_id: ${keypad_page}
+    component_id: 5
+    component_name: keypad.num4
+    id: keypad_num_4
+    on_release:
+      - lambda: id(entered_code) += "4";
+      - script.execute: update_feedback
+
+  - platform: nextion
+    page_id: ${keypad_page}
+    component_id: 6
+    component_name: keypad.num5
+    id: keypad_num_5
+    on_release:
+      - lambda: id(entered_code) += "5";
+      - script.execute: update_feedback
+
+  - platform: nextion
+    page_id: ${keypad_page}
+    component_id: 7
+    component_name: keypad.num6
+    id: keypad_num_6
+    on_release:
+      - lambda: id(entered_code) += "6";
+      - script.execute: update_feedback
+
+  - platform: nextion
+    page_id: ${keypad_page}
+    component_id: 8
+    component_name: keypad.num7
+    id: keypad_num_7
+    on_release:
+      - lambda: id(entered_code) += "7";
+      - script.execute: update_feedback
+
+  - platform: nextion
+    page_id: ${keypad_page}
+    component_id: 9
+    component_name: keypad.num8
+    id: keypad_num_8
+    on_release:
+      - lambda: id(entered_code) += "8";
+      - script.execute: update_feedback
+
+  - platform: nextion
+    page_id: ${keypad_page}
+    component_id: 10
+    component_name: keypad.num9
+    id: keypad_num_9
+    on_release:
+      - lambda: id(entered_code) += "9";
+      - script.execute: update_feedback
+
+  - platform: nextion
+    page_id: ${keypad_page}
+    component_id: 11
+    component_name: keypad.num0
+    id: keypad_num_0
+    on_release:
+      - lambda: id(entered_code) += "0";
+      - script.execute: update_feedback
+
+  - platform: nextion
+    page_id: ${keypad_page}
+    component_id: 12
+    component_name: keypad.enter
+    id: keypad_enter
+    on_release:
+      - if:
+          condition:
+            lambda: return id(entered_code) != "";
+          then:
+            - homeassistant.service:
+                service: alarm_control_panel.alarm_disarm
+                data:
+                  entity_id: ${alarm_entity_id}
+                  code: !lambda 'return id(entered_code);'
+            - lambda: id(entered_code) = "";
+            - script.execute: update_feedback
+          else:
+            - lambda: id(nextion_display).goto_page("${home_page}");
+
+text_sensor:
+  - platform: nextion
+    component_name: keypad.feedback
+    id: keypad_feedback
+
+globals:
+  - id: entered_code
+    type: 'std::string'
+    restore_value: false
+    initial_value: ''
+
+script:
+  - id: update_feedback
+    then:
+      - lambda: |-
+          std::string feedback = "";
+          uint8_t length = id(entered_code).length();
+          length = std::min<uint8_t>(8, length);
+          for (uint8_t i = 0; i < length; i++)
+            feedback += "*";
+          id(keypad_feedback).set_state(feedback, false, true);

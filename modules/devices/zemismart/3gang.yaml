@@ -1,0 +1,242 @@
+packages:
+  common: !include ../../common-8266.yaml
+
+binary_sensor:
+  - platform: gpio
+    pin:
+      inverted: true
+      number: GPIO16
+    name: '${friendly_name} Button 1'
+    disabled_by_default: true
+    on_multi_click:
+      - timing:
+          - ON for at most 0.5s
+          - OFF for at least 0.5s
+        then:
+          - if:
+              condition:
+                or:
+                  - lambda: "return ${switch_relay_1};"
+                  - not:
+                    - api.connected:
+                  - ${relay_1_type}.is_off: '${relay_1_type}1'
+              then:
+                - ${relay_1_type}.toggle: '${relay_1_type}1'
+          - homeassistant.event:
+              event: esphome.switch
+              data:
+                device: ${name}
+                action: click
+                button: "1"
+      - timing:
+          - ON for at most 0.5s
+          - OFF for at most 0.5s
+          - ON for at most 0.5s
+          - OFF for at least 0.5s
+        then:
+          - homeassistant.event:
+              event: esphome.switch
+              data:
+                device: ${name}
+                action: double_click
+                button: "1"
+      - timing:
+          - ON for at most 0.5s
+          - OFF for at most 0.5s
+          - ON for at most 0.5s
+          - OFF for at most 0.5s
+          - ON for at most 0.5s
+          - OFF for at most 0.5s
+          - ON for at most 0.5s
+          - OFF for at least 0.2s
+        then:
+          - homeassistant.event:
+              event: esphome.switch
+              data:
+                device: ${name}
+                action: four_clicks
+                button: "1"
+          - ${relay_1_type}.toggle: '${relay_1_type}1'
+      - timing:
+          - 'ON for at least ${button_1_hold}'
+          # - OFF for at least 0.2s
+        then:
+          - homeassistant.event:
+              event: esphome.switch
+              data:
+                device: ${name}
+                action: hold
+                button: "1"
+
+  - platform: gpio
+    pin:
+      inverted: true
+      number: GPIO5
+    name: '${friendly_name} Button 2'
+    disabled_by_default: true
+    on_multi_click:
+      - timing:
+          - ON for at most 0.5s
+          - OFF for at least 0.5s
+        then:
+          - if:
+              condition:
+                or:
+                  - lambda: "return ${switch_relay_2};"
+                  - not:
+                    - api.connected:
+                  - ${relay_2_type}.is_off: '${relay_2_type}2'
+              then:
+                - ${relay_2_type}.toggle: '${relay_2_type}2'
+          - homeassistant.event:
+              event: esphome.switch
+              data:
+                device: ${name}
+                action: click
+                button: "2"
+      - timing:
+          - ON for at most 0.5s
+          - OFF for at most 0.5s
+          - ON for at most 0.5s
+          - OFF for at least 0.5s
+        then:
+          - homeassistant.event:
+              event: esphome.switch
+              data:
+                device: ${name}
+                action: double_click
+                button: "2"
+      - timing:
+          - ON for at most 0.5s
+          - OFF for at most 0.5s
+          - ON for at most 0.5s
+          - OFF for at most 0.5s
+          - ON for at most 0.5s
+          - OFF for at most 0.5s
+          - ON for at most 0.5s
+          - OFF for at least 0.2s
+        then:
+          - homeassistant.event:
+              event: esphome.switch
+              data:
+                device: ${name}
+                action: four_clicks
+                button: "2"
+          - ${relay_2_type}.toggle: '${relay_2_type}2'
+      - timing:
+          - 'ON for at least ${button_2_hold}'
+          # - OFF for at least 0.2s
+        then:
+          - homeassistant.event:
+              event: esphome.switch
+              data:
+                device: ${name}
+                action: hold
+                button: "2"
+
+  - platform: gpio
+    pin:
+      inverted: true
+      number: GPIO4
+    name: '${friendly_name} Button 3'
+    disabled_by_default: true
+    on_multi_click:
+      - timing:
+          - ON for at most 0.5s
+          - OFF for at least 0.5s
+        then:
+          - if:
+              condition:
+                or:
+                  - lambda: "return ${switch_relay_3};"
+                  - not:
+                    - api.connected:
+                  - ${relay_3_type}.is_off: '${relay_3_type}3'
+              then:
+                - ${relay_3_type}.toggle: '${relay_3_type}3'
+          - homeassistant.event:
+              event: esphome.switch
+              data:
+                device: ${name}
+                action: click
+                button: "3"
+      - timing:
+          - ON for at most 0.5s
+          - OFF for at most 0.5s
+          - ON for at most 0.5s
+          - OFF for at least 0.5s
+        then:
+          - homeassistant.event:
+              event: esphome.switch
+              data:
+                device: ${name}
+                action: double_click
+                button: "3"
+      - timing:
+          - ON for at most 0.5s
+          - OFF for at most 0.5s
+          - ON for at most 0.5s
+          - OFF for at most 0.5s
+          - ON for at most 0.5s
+          - OFF for at most 0.5s
+          - ON for at most 0.5s
+          - OFF for at least 0.2s
+        then:
+          - homeassistant.event:
+              event: esphome.switch
+              data:
+                device: ${name}
+                action: four_clicks
+                button: "3"
+          - ${relay_3_type}.toggle: '${relay_3_type}3'
+      - timing:
+          - 'ON for at least ${button_3_hold}'
+          # - OFF for at least 0.2s
+        then:
+          - homeassistant.event:
+              event: esphome.switch
+              data:
+                device: ${name}
+                action: hold
+                button: "3"
+
+output:
+  - platform: gpio
+    id: relay1
+    pin: GPIO13
+  - platform: gpio
+    id: relay2
+    pin: GPIO12
+  - platform: gpio
+    id: relay3
+    pin: GPIO14
+
+switch:
+  - platform: output
+    id: switch1
+    output: relay1
+    name: '${friendly_name} Relay 1'
+  - platform: output
+    id: switch2
+    output: relay2
+    name: '${friendly_name} Relay 2'
+  - platform: output
+    id: switch3
+    output: relay3
+    name: '${friendly_name} Relay 3'
+
+light:
+  - platform: status_led
+    name: ${friendly_name} Status LED
+    disabled_by_default: true
+    pin:
+      number: GPIO2
+      inverted: True
+
+substitutions:
+  relay_1_type: switch
+  relay_2_type: switch
+  relay_3_type: switch
+  button_1_hold: 2s
+  button_2_hold: 2s
+  button_3_hold: 2s

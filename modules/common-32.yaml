@@ -1,0 +1,11 @@
+substitutions:
+  board: esp32dev
+
+esp32:
+  board: ${board}
+  framework:
+    type: arduino
+
+packages:
+  captive_portal: !include common/captive_portal.yaml
+  base: !include common-base.yaml

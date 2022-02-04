@@ -1,0 +1,28 @@
+packages:
+  common: !include ../common-8266.yaml
+
+logger:
+  baud_rate: 0
+
+uart:
+  baud_rate: 9600
+  tx_pin: GPIO15
+  rx_pin: GPIO13
+
+external_components:
+  source: github://jesserockz/esphome@tuya-new
+  components: [tuya_new]
+
+tuya_new:
+
+climate:
+  - platform: tuya_new
+    name: "${friendly_name}"
+    switch_datapoint: 0
+    target_temperature_datapoint: 7
+    current_temperature_datapoint: 10
+    hysteresis: 2
+    visual:
+      min_temperature: 5
+      max_temperature: 45
+      temperature_step: 1

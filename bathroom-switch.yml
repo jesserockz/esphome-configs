@@ -1,0 +1,11 @@
+substitutions:
+  name: bathroom-switch
+  friendly_name: Bathroom
+  wifi_reboot_timeout: 5min
+
+packages:
+  common: !include modules/common.yaml
+  switch: !include modules/athom-sw03-bathroom-switch.yml
+
+logger:
+  baud_rate: 0

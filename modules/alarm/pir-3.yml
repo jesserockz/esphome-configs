@@ -1,0 +1,102 @@
+sensor:
+  - platform: adc
+    id: pir_3_raw
+    pin: ${pir_3_pin}
+    attenuation: 11db
+    update_interval: ${adc_read_time}
+    unit_of_measurement: ''
+    device_class: ''
+    raw: true
+    on_value:
+      - sensor.template.publish:
+          id: pir_3_value
+          state: !lambda |-
+            if (x < ${pir_short_max}) {
+              return 1;
+            } else if (x > ${pir_normal_min} && x < ${pir_normal_max}) {
+              return 0;
+            } else if (x > ${pir_motion_min} && x < ${pir_motion_max}) {
+              return 2;
+            } else if (x > ${pir_tamper_min}) {
+              return 3;
+            } else {
+              ESP_LOGD("main", "Unknown value: %.0f", x);
+              return 4;
+            }
+
+  - platform: template
+    id: pir_3_value
+    update_interval: never
+    filters:
+      - delta: 1
+    on_value:
+      - script.execute: check_motion
+      - text_sensor.template.publish:
+          id: pir_3_state
+          state: !lambda |-
+            static std::array<std::string, 5> strings = {"Normal", "Short", "Motion", "Tamper", "Uhm???"};
+            return strings[x];
+
+      - if:
+          condition:
+            lambda: return x == 0;
+          then:
+            - binary_sensor.template.publish:
+                id: pir_3_motion
+                state: false
+            - binary_sensor.template.publish:
+                id: pir_3_short
+                state: false
+            - binary_sensor.template.publish:
+                id: pir_3_tamper
+                state: false
+          else:
+            - if:
+                condition:
+                  lambda: return x == 2;
+                then:
+                  - binary_sensor.template.publish:
+                      id: pir_3_motion
+                      state: true
+            - if:
+                condition:
+                  lambda: return x == 1;
+                then:
+                  - binary_sensor.template.publish:
+                      id: pir_3_short
+                      state: true
+            - if:
+                condition:
+                  lambda: return x == 1;
+                then:
+                  - binary_sensor.template.publish:
+                      id: pir_3_tamper
+                      state: true
+
+
+text_sensor:
+  - platform: template
+    name: ${friendly_name} ${pir_3} PIR
+    icon: "mdi:lock-alert"
+    id: pir_3_state
+    update_interval: never
+    entity_category: diagnostic
+    disabled_by_default: true
+
+binary_sensor:
+  - platform: template
+    device_class: motion
+    id: pir_3_motion
+    name: ${friendly_name} ${pir_3} PIR Motion
+
+  - platform: template
+    device_class: tamper
+    id: pir_3_tamper
+    name: ${friendly_name} ${pir_3} PIR Tamper
+    entity_category: diagnostic
+
+  - platform: template
+    device_class: tamper
+    id: pir_3_short
+    name: ${friendly_name} ${pir_3} PIR Short
+    entity_category: diagnostic

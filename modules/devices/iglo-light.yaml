@@ -1,0 +1,40 @@
+packages:
+  remote: !include iglo_light/remote.yaml
+
+api:
+  services: !include iglo_light/services.yaml
+  reboot_timeout: 0s
+
+script: !include iglo_light/effects.yaml
+
+output:
+  - platform: esp8266_pwm
+    id: red_output
+    pin: GPIO12
+  - platform: esp8266_pwm
+    id: green_output
+    pin: GPIO13
+  - platform: esp8266_pwm
+    id: blue_output
+    pin: GPIO14
+  - platform: esp8266_pwm
+    id: cold_output
+    frequency: 1000 Hz
+    pin: GPIO5
+  - platform: esp8266_pwm
+    id: warm_output
+    frequency: 1000 Hz
+    pin: GPIO4
+
+light:
+  - platform: rgbww
+    id: the_light
+    name: ${friendly_name}
+    red: red_output
+    green: green_output
+    blue: blue_output
+    cold_white: cold_output
+    warm_white: warm_output
+    cold_white_color_temperature: 153 mireds
+    warm_white_color_temperature: 500 mireds
+    color_interlock: True

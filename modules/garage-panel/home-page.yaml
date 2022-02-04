@@ -1,0 +1,50 @@
+substitutions:
+  home_page: '0'
+
+binary_sensor:
+  - platform: nextion
+    page_id: ${home_page}
+    component_id: 2
+    component_name: home.armbtn
+    id: home_arm_btn
+    on_release:
+      - if:
+          condition:
+            text_sensor.state:
+              id: alarm_state
+              state: 'disarmed'
+          then:
+            - homeassistant.service:
+                service: alarm_control_panel.alarm_arm_away
+                data:
+                  entity_id: ${alarm_entity_id}
+          else:
+            - lambda: id(nextion_display).goto_page("${keypad_page}");
+
+  - platform: nextion
+    page_id: ${home_page}
+    component_id: 3
+    component_name: home.garagedoortbn
+    id: home_garage_door_btn
+    on_release:
+      - homeassistant.service:
+          service: cover.toggle
+          data:
+            entity_id: cover.garage_door
+
+text_sensor:
+  - platform: nextion
+    component_name: home.clock
+    id: home_clock
+
+  - platform: nextion
+    component_name: home.armbtn
+    id: home_arm_btn_text
+
+interval:
+  - interval: 1s
+    then:
+      - lambda:
+          auto time = id(homeassistant_time).now();
+          std::string time_str = time.strftime("%H:%M:%S");
+          id(home_clock).set_state(time_str, false, true);

@@ -1,0 +1,40 @@
+substitutions:
+  fan_name: ${friendly_name}
+
+packages:
+  common: !include ../common-8266.yaml
+
+uart:
+  tx_pin: 1
+  rx_pin: 3
+  baud_rate: 9600
+
+tuya:
+
+fan:
+  - platform: tuya
+    name: ${fan_name}
+    oscillation_datapoint: 8
+    speed_datapoint: 2
+    switch_datapoint: 1
+    speed_count: 9
+
+number:
+  - platform: tuya
+    name: "${friendly_name} Speed Mode"
+    number_datapoint: 3
+    min_value: 0
+    max_value: 3
+    step: 1
+  - platform: tuya
+    name: "${friendly_name} Timer"
+    number_datapoint: 11
+    min_value: 0
+    max_value: 8
+    step: 1
+
+switch:
+  - platform: tuya
+    name: "${friendly_name} Beep"
+    entity_category: config
+    switch_datapoint: 101

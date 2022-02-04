@@ -1,0 +1,15 @@
+substitutions:
+  name: garage-switch
+  friendly_name: Garage Switch
+  ip: '10.6.6.50'
+  wifi_reboot_timeout: 0s
+  switch_relay_1: "true"
+  switch_relay_2: "false"
+  switch_relay_3: "false"
+  relay_1_type: light
+  light_1_name: 'Laundry'
+  button_3_hold: 1s
+
+packages:
+  zemismart: !include modules/devices/zemismart/3gang.yaml
+  light-1: !include modules/devices/zemismart/light-1.yaml

@@ -1,0 +1,6 @@
+substitutions:
+  name: entry-switch
+  friendly_name: Entry Switch
+
+packages:
+  switch: !include modules/devices/athom-sw02.yaml

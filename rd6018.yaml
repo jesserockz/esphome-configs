@@ -1,0 +1,178 @@
+substitutions:
+  name: rd6018
+  friendly_name: RD6018
+  board: esp12e
+
+packages:
+  common: !include modules/common-8266.yaml
+
+logger:
+  baud_rate: 0
+
+uart:
+  tx_pin: GPIO1
+  rx_pin: GPIO3
+  baud_rate: 115200
+
+modbus_controller:
+  address: 0x01
+  update_interval: 10s
+
+sensor:
+  - platform: modbus_controller
+    name: '${friendly_name} Internal Temperature'
+    register_type: holding
+    address: 4
+    register_count: 2
+    bitmask: 0xFFFF
+    value_type: U_DWORD
+    unit_of_measurement: °C
+    state_class: measurement
+    device_class: temperature
+    lambda: |
+      return data[item->offset + 1] == 0 ? x : -x;
+
+  - platform: modbus_controller
+    name: '${friendly_name} External Temperature'
+    register_type: holding
+    address: 34
+    register_count: 2
+    bitmask: 0xFFFF
+    value_type: U_DWORD
+    unit_of_measurement: °C
+    state_class: measurement
+    device_class: temperature
+    lambda: |
+      return data[item->offset + 1] == 0 ? x : -x;
+
+  - platform: modbus_controller
+    name: '${friendly_name} Output Voltage'
+    register_type: holding
+    address: 10
+    value_type: U_WORD
+    unit_of_measurement: V
+    state_class: measurement
+    device_class: voltage
+    accuracy_decimals: 2
+    filters:
+      - multiply: 0.01
+
+  - platform: modbus_controller
+    name: '${friendly_name} Output Current'
+    register_type: holding
+    address: 11
+    value_type: U_WORD
+    unit_of_measurement: A
+    state_class: measurement
+    device_class: current
+    accuracy_decimals: 2
+    filters:
+      - multiply: 0.01
+
+  - platform: modbus_controller
+    name: '${friendly_name} Output Energy'
+    register_type: holding
+    address: 12
+    value_type: U_WORD
+    unit_of_measurement: Ah
+    state_class: measurement
+    # device_class: energy
+    accuracy_decimals: 2
+    filters:
+      - multiply: 0.001
+
+  - platform: modbus_controller
+    name: '${friendly_name} Output Power'
+    address: 13
+    register_type: holding
+    value_type: U_WORD
+    unit_of_measurement: W
+    state_class: measurement
+    device_class: power
+    accuracy_decimals: 2
+    filters:
+      - multiply: 0.01
+
+  - platform: modbus_controller
+    name: '${friendly_name} Input Voltage'
+    register_type: holding
+    address: 14
+    value_type: U_WORD
+    unit_of_measurement: V
+    state_class: measurement
+    device_class: voltage
+    accuracy_decimals: 2
+    filters:
+      - multiply: 0.01
+
+  - platform: modbus_controller
+    name: '${friendly_name} Energy'
+    internal: true
+    register_type: holding
+    address: 40
+    value_type: U_DWORD
+    unit_of_measurement: Wh
+    state_class: measurement
+    device_class: energy
+    accuracy_decimals: 3
+    filters:
+      - multiply: 0.001
+
+switch:
+  - platform: modbus_controller
+    name: '${friendly_name} Keypad Lock'
+    address: 15
+    register_type: holding
+    bitmask: 1
+
+  - platform: modbus_controller
+    name: '${friendly_name} Power'
+    address: 18
+    register_type: holding
+    bitmask: 1
+
+number:
+  - platform: modbus_controller
+    name: '${friendly_name} Voltage Setting'
+    address: 8
+    value_type: U_WORD
+    min_value: 0.01
+    max_value: 60.0
+    step: 0.01
+    multiply: 100
+
+  - platform: modbus_controller
+    name: '${friendly_name} Current Setting'
+    address: 9
+    value_type: U_WORD
+    min_value: 0.01
+    max_value: 18.0
+    step: 0.01
+    multiply: 100
+
+  - platform: modbus_controller
+    name: '${friendly_name} Voltage Protection'
+    entity_category: config
+    address: 82
+    value_type: U_WORD
+    min_value: 0.01
+    max_value: 60.0
+    step: 0.01
+    multiply: 100
+
+  - platform: modbus_controller
+    name: '${friendly_name} Current Protection'
+    entity_category: config
+    address: 83
+    value_type: U_WORD
+    min_value: 0.01
+    max_value: 18.0
+    step: 0.01
+    multiply: 100
+
+binary_sensor:
+  - platform: modbus_controller
+    name: '${friendly_name} Battery Mode'
+    address: 32
+    register_type: holding
+    bitmask: 1

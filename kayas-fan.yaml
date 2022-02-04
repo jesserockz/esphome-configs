@@ -1,0 +1,12 @@
+substitutions:
+  name: kayas-fan
+  friendly_name: Kaya's Fan
+  fan_name: Kaya
+  ip: '10.6.6.146'
+  wifi_reboot_timeout: 5min
+
+packages:
+  fan: !include modules/devices/kogan-turbo-fan.yaml
+
+logger:
+  baud_rate: 0

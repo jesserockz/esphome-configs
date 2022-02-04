@@ -1,0 +1,8 @@
+substitutions:
+  board: esp01_1m
+
+esp8266:
+  board: "${board}"
+
+packages:
+  base: !include common-base.yaml

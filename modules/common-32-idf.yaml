@@ -1,0 +1,10 @@
+substitutions:
+  board: esp32dev
+
+esp32:
+  board: ${board}
+  framework:
+    type: esp-idf
+
+packages:
+  base: !include common-base.yaml

@@ -1,0 +1,11 @@
+sensor:
+  - platform: pvvx_mithermometer
+    mac_address: A4:C1:38:8C:6B:55
+    battery_level:
+      name: Kitchen ATC Battery Level
+    battery_voltage:
+      name: Kitchen ATC Battery Voltage
+    humidity:
+      name: Kitchen ATC Humidity
+    temperature:
+      name: Kitchen ATC Temperature

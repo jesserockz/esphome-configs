@@ -1,0 +1,11 @@
+sensor:
+  - platform: pvvx_mithermometer
+    mac_address: A4:C1:38:6C:64:B8
+    battery_level:
+      name: Taiki's Room ATC Battery Level
+    battery_voltage:
+      name: Taiki's Room ATC Battery Voltage
+    humidity:
+      name: Taiki's Room ATC Humidity
+    temperature:
+      name: Taiki's Room ATC Temperature

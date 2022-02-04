@@ -1,0 +1,52 @@
+substitutions:
+  name: desk-led-strip
+  friendly_name: "Desk LED Strip"
+
+packages:
+  common: !include modules/common-8266.yaml
+
+binary_sensor:
+  - platform: gpio
+    pin:
+      number: GPIO0
+      mode: INPUT_PULLUP
+      inverted: true
+    name: "${friendly_name} Button"
+    disabled_by_default: true
+    on_multi_click:
+      - timing:
+          - ON for at most 1s
+          - OFF for at least 0.2s
+        then:
+          - light.toggle: light1
+      - timing:
+          - ON for at least 4s
+        then:
+          - button.press: restart_button
+
+output:
+  - platform: esp8266_pwm
+    id: red_output
+    pin: GPIO4
+
+  - platform: esp8266_pwm
+    id: green_output
+    pin: GPIO12
+
+  - platform: esp8266_pwm
+    id: blue_output
+    pin: GPIO14
+
+light:
+  - platform: monochromatic
+    name: "${friendly_name} 1"
+    id: light1
+    output: red_output
+  - platform: monochromatic
+    name: "${friendly_name} 2"
+    id: light2
+    output: green_output
+  - platform: monochromatic
+    name: "${friendly_name} 3"
+    id: light3
+    output: blue_output

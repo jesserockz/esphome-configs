@@ -1,0 +1,9 @@
+substitutions:
+  name: garage-light
+  friendly_name: Garage Light
+  ip: '10.6.6.190'
+  wifi_reboot_timeout: 0s
+  light_name: Garage
+
+packages:
+  light: !include modules/devices/athom-rgbct-15w.yml

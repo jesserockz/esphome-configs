@@ -1,0 +1,15 @@
+substitutions:
+  board: esp32dev
+
+esphome:
+  name: $name
+
+esp32:
+  board: ${board}
+  framework:
+    type: esp-idf
+    sdkconfig_options:
+      CONFIG_FREERTOS_UNICORE: y
+
+packages:
+  base: !include common-base.yaml

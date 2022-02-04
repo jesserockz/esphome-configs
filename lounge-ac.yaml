@@ -1,0 +1,9 @@
+substitutions:
+  name: lounge-ac
+  friendly_name: Lounge AC
+  ip: "10.6.6.132"
+  wifi_reboot_timeout: 5min
+  climate_name: Lounge
+
+packages:
+  panasonic: !include modules/devices/panasonic-ac.yaml

@@ -1,0 +1,11 @@
+sensor:
+  - platform: pvvx_mithermometer
+    mac_address: A4:C1:38:7B:9F:0B
+    battery_level:
+      name: Master Room ATC Battery Level
+    battery_voltage:
+      name: Master Room ATC Battery Voltage
+    humidity:
+      name: Master Room ATC Humidity
+    temperature:
+      name: Master Room ATC Temperature

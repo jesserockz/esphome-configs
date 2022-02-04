@@ -1,0 +1,44 @@
+- service: effect
+  variables:
+    effect: string
+  then:
+  - if:
+      condition:
+        lambda: 'return effect == "snow";'
+      then:
+      - script.execute: effect_snow
+  - if:
+      condition:
+        lambda: 'return effect == "candle";'
+      then:
+      - script.execute: effect_candle
+  - if:
+      condition:
+        lambda: 'return effect == "warm";'
+      then:
+      - script.execute: effect_warm
+  - if:
+      condition:
+        lambda: 'return effect == "natural";'
+      then:
+      - script.execute: effect_natural
+  - if:
+      condition:
+        lambda: 'return effect == "sleep";'
+      then:
+      - script.execute: effect_sleep
+  - if:
+      condition:
+        lambda: 'return effect == "relax";'
+      then:
+      - script.execute: effect_relax
+  - if:
+      condition:
+        lambda: 'return effect == "reading";'
+      then:
+      - script.execute: effect_reading
+  - if:
+      condition:
+        lambda: 'return effect == "work";'
+      then:
+      - script.execute: effect_work

@@ -1,0 +1,304 @@
+substitutions:
+  name: alarm
+  friendly_name: Alarm
+  wifi_reboot_timeout: 0s
+
+  alarm_code: !secret alarm_master_code
+
+  disarmed_state: '0'
+  arming_state: '1'
+  armed_away_state: '2'
+  armed_home_state: '3'
+  armed_night_state: '4'
+  pending_state: '5'
+  triggered_state: '6'
+
+  state_strings: '{"disarmed", "arming", "armed_away", "armed_home", "armed_night", "pending", "triggered"}'
+
+  pir_1: 'Master'
+  pir_1_pin: '33'
+  pir_2: 'Garage'
+  pir_2_pin: '32'
+  pir_3: 'Lounge'
+  pir_3_pin: '34'
+
+  # pir_4: ''
+  # pir_4_pin: ''
+  # pir_5: ''
+  # pir_5_pin: '39'
+  # pir_6: ''
+  # pir_6_pin: '36'
+
+  adc_read_time: 0.1s
+
+  # Raw voltage min and max
+  pir_short_max: !secret alarm_pir_short_max
+
+  pir_normal_min: !secret alarm_pir_normal_min
+  pir_normal_max: !secret alarm_pir_normal_max
+
+  pir_motion_min: !secret alarm_pir_motion_min
+  pir_motion_max: !secret alarm_pir_motion_max
+
+  pir_tamper_min: !secret alarm_pir_tamper_min
+
+######### Exposed to HA ##########
+
+# sensor.alarm_state
+#   - disarmed
+#   - arming
+#   - armed_away
+#   - armed_home
+#   - armed_night
+#   - pending
+#   - triggered
+
+# text_sensor.alarm_xxx_pir
+#   - Normal
+#   - Short
+#   - Motion
+#   - Tamper
+
+# service.esphome_${name}_arm
+# service.esphome_${name}_arm_away
+
+# service.esphome_${name}_disarm
+#   data:
+#     code: "XXXXXXX"
+
+##################################
+
+packages:
+  common: !include modules/common-32-idf.yaml
+  master: !include modules/alarm/pir-1.yml
+  garage: !include modules/alarm/pir-2.yml
+  lounge: !include modules/alarm/pir-3.yml
+
+external_components:
+  source: github://muxa/esphome-state-machine
+  components:
+    - state_machine
+
+logger:
+  logs:
+    sensor: INFO
+
+api:
+  services:
+    - service: arm
+      then:
+        - state_machine.transition: arm_away
+    - service: arm_away
+      then:
+        - state_machine.transition: arm_away
+
+    - service: disarm
+      variables:
+        code: string
+      then:
+        - if:
+            condition:
+              lambda: return code == "${alarm_code}";
+            then:
+              - state_machine.transition: disarm
+            else:
+              - state_machine.transition: failed_code
+
+script:
+  - id: check_motion
+    then:
+      - if:
+          condition:
+            and:
+              - or:
+                  - state_machine.state: armed_away
+                  - state_machine.state: armed_home
+                  - state_machine.state: armed_night
+              - or:
+                - lambda: return id(pir_1_value).state > 0;
+                - lambda: return id(pir_2_value).state > 0;
+                - lambda: return id(pir_3_value).state > 0;
+          then:
+            - state_machine.transition: motion
+
+globals:
+  - id: alarm_state_global
+    type: 'uint8_t'
+    restore_value: true
+    initial_value: '0'
+  - id: incorrect_codes
+    type: 'uint8_t'
+    restore_value: true
+    initial_value: '0'
+
+switch:
+  - platform: gpio
+    pin: GPIO2
+    restore_mode: ALWAYS_OFF
+    id: siren
+    name: ${friendly_name} Siren
+
+sensor:
+  - platform: template
+    id: alarm_state
+    update_interval: 1s
+    lambda: return id(alarm_state_global);
+    filters:
+      - delta: 1
+    on_value:
+      - text_sensor.template.publish:
+          id: alarm_state_text
+          state: !lambda |-
+            static std::array<std::string, 7> strings = ${state_strings};
+            int y = (int) x;
+            return strings[y];
+
+  - platform: template
+    id: incorrect_codes_sensor
+    name: '${friendly_name} Incorrect Codes'
+    lambda: return id(incorrect_codes);
+    update_interval: never
+
+text_sensor:
+  # - platform: template
+  - platform: state_machine
+    id: alarm_state_text
+    # update_interval: never
+    name: ${friendly_name} State
+
+number:
+  - platform: template
+    id: arming_timeout
+    name: ${friendly_name} Arming Timeout
+    restore_value: true
+    initial_value: 60
+    unit_of_measurement: seconds
+    min_value: 0
+    max_value: 300
+    step: 1
+    mode: box
+    optimistic: true
+    entity_category: config
+
+  - platform: template
+    id: pending_timeout
+    name: ${friendly_name} Pending Timeout
+    restore_value: true
+    initial_value: 60
+    unit_of_measurement: seconds
+    min_value: 0
+    max_value: 300
+    step: 1
+    mode: box
+    optimistic: true
+    entity_category: config
+
+  - platform: template
+    id: trigger_timeout
+    name: ${friendly_name} Trigger Timeout
+    restore_value: true
+    initial_value: 5
+    unit_of_measurement: minutes
+    min_value: 1
+    max_value: 20
+    step: 1
+    mode: box
+    optimistic: true
+    entity_category: config
+
+state_machine:
+  initial_state: 'disarmed'
+  states:
+    - name: 'disarmed'
+
+    - name: 'arming'
+      on_enter:
+        - homeassistant.event:
+            event: esphome.alarm_buzzer_start
+            data:
+              type: arming
+              length: !lambda return id(arming_timeout).state;
+        - delay: !lambda return id(arming_timeout).state * 1000;
+        - state_machine.transition: arm_away
+      on_leave:
+        - homeassistant.event:
+            event: esphome.alarm_buzzer_stop
+
+    - name: 'armed_away'
+    - name: 'armed_home'
+    - name: 'armed_night'
+
+    - name: 'pending'
+      on_enter:
+        - homeassistant.event:
+            event: esphome.alarm_buzzer_start
+            data:
+              type: pending
+              length: !lambda return id(pending_timeout).state;
+        - delay: !lambda return id(pending_timeout).state * 1000;
+        - state_machine.transition: trigger
+      on_leave:
+        - homeassistant.event:
+            event: esphome.alarm_buzzer_stop
+
+    - name: 'triggered'
+      on_enter:
+        - switch.turn_on: siren
+        - homeassistant.event:
+            event: esphome.alarm_buzzer_start
+            data:
+              type: triggered
+              length: !lambda return id(trigger_timeout).state;
+
+        - delay: !lambda return id(trigger_timeout).state * 60 * 1000;
+        - state_machine.transition: arm_away
+      on_leave:
+        - switch.turn_off: siren
+        - homeassistant.event:
+            event: esphome.alarm_buzzer_stop
+
+  inputs:
+    - name: arm_away
+      transitions:
+        - disarmed -> arming
+        - arming -> armed_away
+        - triggered -> armed_away
+
+    - name: arm_home
+      transitions:
+        - disarmed -> armed_home
+
+    - name: arm_night
+      transitions:
+        - disarmed -> armed_night
+
+    - name: disarm
+      transitions:
+        - arming -> disarmed
+        - armed_away -> disarmed
+        - armed_home -> disarmed
+        - armed_night -> disarmed
+        - pending -> disarmed
+        - triggered -> disarmed
+
+    - name: motion
+      transitions:
+        - armed_away -> pending
+        - armed_home -> pending
+        - armed_night -> pending
+
+    - name: trigger
+      transitions:
+        - armed_away -> triggered
+        - armed_home -> triggered
+        - armed_night -> triggered
+        - pending -> triggered
+
+    - name: failed_code
+      action:
+        - lambda: id(incorrect_codes) += 1;
+        - if:
+            condition:
+              lambda: return id(incorrect_codes) >= 3;
+            then:
+              - state_machine.transition: trigger

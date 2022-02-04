@@ -1,0 +1,9 @@
+substitutions:
+  name: kayas-light
+  friendly_name: Kaya's Light
+  ip: '10.6.6.85'
+  wifi_reboot_timeout: 0s
+  light_name: Kaya's Room
+
+packages:
+  light: !include modules/devices/athom-rgbct-light.yml

@@ -1,0 +1,8 @@
+substitutions:
+  name: rf-bridge
+  friendly_name: RF Bridge
+  ip: '10.6.6.228'
+  wifi_reboot_timeout: 5min
+
+packages:
+  rf-bridge: !include modules/devices/sonoff-rf-bridge.yaml

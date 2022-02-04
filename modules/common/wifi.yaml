@@ -1,0 +1,10 @@
+substitutions:
+  wifi_reboot_timeout: 5min
+
+wifi:
+  # use_address: $ip
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+  reboot_timeout: $wifi_reboot_timeout
+  ap:
+    password: !secret ap_password

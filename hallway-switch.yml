@@ -1,0 +1,65 @@
+substitutions:
+  name: hallway-switch
+  friendly_name: Hallway Switch
+  board: esp8285
+  ip: '10.6.6.123'
+
+packages:
+  common: !include modules/common-8266.yaml
+
+switch:
+  - platform: gpio
+    id: relay
+    pin: GPIO13
+    name: "${friendly_name} Relay"
+    restore_mode: RESTORE_DEFAULT_ON
+
+light:
+  - platform: status_led
+    name: "${friendly_name} Blue LED"
+    disabled_by_default: true
+    pin:
+      number: GPIO4
+      inverted: true
+
+binary_sensor:
+  - platform: gpio
+    name: "${friendly_name} Button"
+    disabled_by_default: true
+    pin:
+      number: GPIO3
+      inverted: true
+      mode: INPUT_PULLUP
+
+  - platform: gpio
+    name: "${friendly_name}"
+    disabled_by_default: true
+    pin:
+      number: GPIO14
+      mode: INPUT_PULLUP
+    on_state:
+      - homeassistant.event:
+          event: esphome.switch
+          data:
+            device: ${name}
+            action: click
+    on_multi_click:
+      - timing:
+          - ON for at most 0.5s
+          - OFF for at most 0.5s
+          - ON for at most 0.5s
+          - OFF for at most 0.5s
+        then:
+          - switch.toggle: relay
+
+      - timing:
+          - ON for at most 0.5s
+          - OFF for at most 0.5s
+          - ON for at most 0.5s
+          - OFF for at most 0.5s
+          - ON for at most 0.5s
+          - OFF for at most 0.5s
+          - ON for at most 0.5s
+          - OFF for at most 0.5s
+        then:
+          - button.press: restart_button

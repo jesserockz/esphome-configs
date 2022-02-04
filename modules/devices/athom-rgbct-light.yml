@@ -1,0 +1,39 @@
+substitutions:
+  restore_mode: RESTORE_DEFAULT_ON
+  light_name: "${friendly_name}"
+  board: esp8285
+
+packages:
+  common: !include ../common-8266.yaml
+
+output:
+  - platform: esp8266_pwm
+    id: red_output
+    pin: GPIO4
+  - platform: esp8266_pwm
+    id: green_output
+    pin: GPIO12
+  - platform: esp8266_pwm
+    id: blue_output
+    pin: GPIO14
+  - platform: esp8266_pwm
+    id: white_output
+    pin: GPIO5
+  - platform: esp8266_pwm
+    id: ct_output
+    inverted: true
+    pin: GPIO13
+
+light:
+  - platform: rgbct
+    restore_mode: ${restore_mode}
+    color_interlock: true
+    name: "${light_name}"
+    red: red_output
+    green: green_output
+    blue: blue_output
+    white_brightness: white_output
+    color_temperature: ct_output
+    cold_white_color_temperature: 153mireds
+    warm_white_color_temperature: 500mireds
+    default_transition_length: 200ms

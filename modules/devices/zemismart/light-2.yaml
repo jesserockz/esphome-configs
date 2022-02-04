@@ -1,0 +1,9 @@
+light:
+  - platform: binary
+    id: light2
+    output: relay2
+    name: '${light_2_name}'
+    on_turn_on:
+      - switch.turn_on: switch2
+    on_turn_off:
+      - switch.turn_off: switch2

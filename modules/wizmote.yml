@@ -1,0 +1,27 @@
+external_components:
+  - source: github://jesserockz/wizmote-esphome
+    components:
+      - esp_now
+      - wizmote
+
+esp_now:
+
+wizmote:
+  on_button:
+    if:
+      condition:
+        lambda: return data.button >= 16 && data.button <= 19;
+      then:
+        - homeassistant.event:
+            event: esphome.wizmote_choose
+            data:
+              mac: !lambda 'return format_hex(data.bssid, 6);'
+              button: !lambda 'return data.button - 15;'
+              sequence: !lambda 'return data.sequence;'
+      else:
+        - homeassistant.event:
+            event: esphome.wizmote_action
+            data:
+              mac: !lambda 'return format_hex(data.bssid, 6);'
+              button: !lambda 'return data.button;'
+              sequence: !lambda 'return data.sequence;'

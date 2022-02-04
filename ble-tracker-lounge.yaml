@@ -1,0 +1,24 @@
+substitutions:
+  name: ble-tracker-lounge
+  friendly_name: BLE Tracker Lounge
+  wifi_reboot_timeout: 5min
+  ip: "10.6.6.115"
+
+packages:
+  common: !include modules/common-32-ble.yaml
+
+  lounge-thermometer: !include modules/mithermometers/lounge.yaml
+  master-room-thermometer: !include modules/mithermometers/master-room.yaml
+  ensuite-thermometer: !include modules/mithermometers/ensuite.yaml
+  kitchen-thermometer: !include modules/mithermometers/kitchen.yaml
+  bathroom-thermometer: !include modules/mithermometers/bathroom.yaml
+  hwc-thermometer: !include modules/mithermometers/hwc.yaml
+
+  gpio0: !include modules/gpio0.yaml
+
+light:
+  - platform: status_led
+    pin: GPIO2
+    name: "${friendly_name} LED"
+    effects:
+      - strobe:

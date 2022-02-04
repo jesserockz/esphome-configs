@@ -1,0 +1,14 @@
+esp32_camera:
+  name: "${friendly_name}"
+  internal: true
+  external_clock:
+    pin: 32
+    frequency: 20MHz
+  i2c_pins:
+    sda: 13
+    scl: 12
+  vsync_pin: 27
+  href_pin: 25
+  pixel_clock_pin: 19
+  power_down_pin: 26
+  data_pins: [5, 14, 4, 15, 18, 23, 36, 39]

@@ -1,0 +1,92 @@
+binary_sensor:
+  - platform: gpio
+    pin:
+      number: GPIO0
+      mode: INPUT_PULLUP
+      inverted: True
+    name: '${friendly_name} Button'
+    on_press:
+      then:
+        - switch.toggle: relay
+    on_multi_click:
+      - timing:
+          - ON for at most 0.5s
+          - OFF for at most 0.5s
+          - ON for at most 0.5s
+          - OFF for at most 0.5s
+          - ON for at most 0.5s
+          - OFF for at most 0.5s
+          - ON for at most 0.5s
+          - OFF for at least 0.2s
+        then:
+          - switch.turn_on: reboot
+
+  - platform: gpio
+    id: raw_switch
+    pin:
+      number: $switch_pin
+      mode: INPUT_PULLUP
+    on_state:
+      then:
+        - binary_sensor.template.publish:
+            id: switch_clicker
+            state: ON
+        - delay: 100ms
+        - binary_sensor.template.publish:
+            id: switch_clicker
+            state: OFF
+
+  - platform: template
+    id: switch_clicker
+    name: ${friendly_name}
+    on_multi_click:
+      - timing:
+          - ON for at most 0.2s
+          - OFF for at least 0.5s
+        then:
+          - switch.toggle: relay
+          - homeassistant.event:
+              event: esphome.light_switch
+              data:
+                switch: $name
+                light: $light_entity
+                action: toggle
+      - timing:
+          - ON for at most 0.2s
+          - OFF for at most 0.5s
+          - ON for at most 0.2s
+          - OFF for at least 0.5s
+        then:
+          - homeassistant.event:
+              event: esphome.light_switch
+              data:
+                switch: $name
+                light: $light_entity
+                action: double_toggle
+      - timing:
+          - ON for at most 0.2s
+          - OFF for at most 0.5s
+          - ON for at most 0.2s
+          - OFF for at most 0.5s
+          - ON for at most 0.2s
+          - OFF for at most 0.5s
+          - ON for at most 0.2s
+          - OFF for at least 0.5s
+        then:
+          - switch.turn_on: reboot
+
+switch:
+  - platform: gpio
+    id: relay
+    name: '${friendly_name} Relay'
+    pin: GPIO12
+    restore_mode: ALWAYS_ON
+
+  - platform: restart
+    name: '${friendly_name} Reboot'
+    id: reboot
+
+status_led:
+  pin:
+    number: GPIO13
+    inverted: yes

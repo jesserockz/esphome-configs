@@ -1,0 +1,9 @@
+substitutions:
+  name: master-light-1
+  friendly_name: Master Light 1
+  light_name: Master 1
+  ip: '10.6.6.217'
+  wifi_reboot_timeout: 0s
+
+packages:
+  light: !include modules/devices/kogan-cwww-light.yaml

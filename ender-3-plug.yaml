@@ -1,0 +1,6 @@
+substitutions:
+  name: ender-3-plug
+  friendly_name: Ender 3 Plug
+
+packages:
+  common: !include modules/devices/athom-smart-plug-v2.yaml

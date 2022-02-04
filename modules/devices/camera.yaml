@@ -1,0 +1,25 @@
+esp32_camera:
+  name: "${friendly_name}"
+  internal: true
+  external_clock:
+    pin: 0
+    frequency: 20MHz
+  i2c_pins:
+    sda: 26
+    scl: 27
+  vsync_pin: 25
+  href_pin: 23
+  pixel_clock_pin: 22
+  power_down_pin: 32
+  data_pins: [5, 18, 19, 21, 36, 39, 34, 35]
+
+
+output:
+  - platform: gpio
+    pin: 4
+    id: flash_output
+
+light:
+  - platform: binary
+    name: "${friendly_name} Flash"
+    output: flash_output

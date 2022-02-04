@@ -1,0 +1,9 @@
+substitutions:
+  name: kitchen-light-2
+  friendly_name: Kitchen Light 2
+  light_name: Kitchen 2
+  ip: '10.6.6.154'
+  wifi_reboot_timeout: 0s
+
+packages:
+  light: !include modules/devices/athom-rgbct-light.yml

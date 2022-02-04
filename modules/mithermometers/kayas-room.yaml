@@ -1,0 +1,11 @@
+sensor:
+  - platform: pvvx_mithermometer
+    mac_address: A4:C1:38:B0:97:68
+    battery_level:
+      name: Kaya's Room ATC Battery Level
+    battery_voltage:
+      name: Kaya's Room ATC Battery Voltage
+    humidity:
+      name: Kaya's Room ATC Humidity
+    temperature:
+      name: Kaya's Room ATC Temperature

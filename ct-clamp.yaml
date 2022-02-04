@@ -1,0 +1,42 @@
+substitutions:
+  name: ct-clamp
+  friendly_name: CT Clamp
+  wifi_reboot_timeout: 0s
+  ip: "10.6.6.82"
+
+packages:
+  common: !include modules/common-32-idf.yaml
+
+  gpio0: !include modules/gpio0.yaml
+
+light:
+  - platform: status_led
+    pin: GPIO2
+    name: '${friendly_name} Status LED'
+
+sensor:
+  - platform: adc
+    id: analog
+    pin: GPIO34
+    attenuation: 11db
+    update_interval: never
+
+  - platform: ct_clamp
+    name: CT Measured Current
+    id: current
+    sensor: analog
+    sample_duration: 200ms
+    update_interval: 1000ms
+    filters:
+      # - multiply: 1.25
+      # - multiply: 30 # Calibration for resister
+      # - multiply: 3.26 # Calibration for D1 Mini voltage converter
+      - calibrate_linear:
+          - 0 -> 0
+          # - 0.014 -> 0.749
+          # - 0.081 -> 8.33
+          # - 0.1 -> 10.4
+          # - 0.47 -> 22
+          # new measured values 13-05-21
+          # - 0.37 -> 14
+          - 0.47 -> 19.23

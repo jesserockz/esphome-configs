@@ -1,0 +1,12 @@
+substitutions:
+  name: taikis-switch
+  friendly_name: Taiki's Switch
+  ip: '10.6.6.119'
+  wifi_reboot_timeout: 0s
+  switch_relay_1: "false"
+  switch_relay_2: "false"
+  switch_relay_3: "false"
+  button_3_hold: 1s
+
+packages:
+  zemismart: !include modules/devices/zemismart/3gang.yaml

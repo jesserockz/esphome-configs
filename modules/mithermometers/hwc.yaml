@@ -1,0 +1,11 @@
+sensor:
+  - platform: pvvx_mithermometer
+    mac_address: A4:C1:38:2B:B1:48
+    battery_level:
+      name: Hot Water Cupboard ATC Battery Level
+    battery_voltage:
+      name: Hot Water Cupboard ATC Battery Voltage
+    humidity:
+      name: Hot Water Cupboard ATC Humidity
+    temperature:
+      name: Hot Water Cupboard ATC Temperature
