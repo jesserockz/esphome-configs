@@ -55,7 +55,7 @@ jobs:
         with:
           python-version: 3.9
       - name: Install ESPHome
-        run: pip install esphome
+        run: pip install git+https://github.com/esphome/esphome.git@dev
       - name: Rename stub secrets
         run: mv ./secrets.ci.yaml ./secrets.yaml
       - name: Run ESPHome config
