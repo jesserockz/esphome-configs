@@ -1,3 +1,4 @@
+---
 platform: restart
 name: "${friendly_name} Restart"
 id: restart_button

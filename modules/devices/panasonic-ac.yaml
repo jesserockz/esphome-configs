@@ -1,3 +1,4 @@
+---
 substitutions:
   climate_name: ${friendly_name}
 

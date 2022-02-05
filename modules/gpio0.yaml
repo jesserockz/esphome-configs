@@ -1,3 +1,4 @@
+---
 binary_sensor:
   - platform: gpio
     pin:

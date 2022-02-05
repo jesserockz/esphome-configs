@@ -1,13 +1,16 @@
+---
 packages:
   common: !include common.yaml
 
 binary_sensor:
   - platform: gpio
     pin:
-      number: 3
-      mode: INPUT_PULLUP
+      number: GPIO3
+      mode:
+        input: true
+        pullup: true
       inverted: true
-    name: "${friendly_name} Power Button"
+    name: '${friendly_name} Power Button'
     on_multi_click:
       - timing:
           - ON for at most 1s
@@ -22,57 +25,56 @@ sensor:
   - platform: hlw8012
     sel_pin:
       number: GPIO12
-      inverted: True
+      inverted: true
     cf_pin: GPIO4
     cf1_pin: GPIO5
     voltage_divider: 780
     current:
-      name: "${friendly_name} Current"
+      name: '${friendly_name} Current'
       filters:
-          - calibrate_linear:
-            - 0.0000 -> 0.0110 # Relay off no load
-            - 0.0097 -> 0.0260 # Relay on no load
+        - calibrate_linear:
+            - 0.0000 -> 0.0110  # Relay off no load
+            - 0.0097 -> 0.0260  # Relay on no load
             - 0.9270 -> 0.7570
             - 2.0133 -> 1.6330
             - 2.9307 -> 2.3750
             - 5.4848 -> 4.4210
             - 8.4308 -> 6.8330
             - 9.9171 -> 7.9830
-          # Normalize for plug load
-          - lambda: if (x < 0.0260) return 0; else return (x - 0.0260);
+        # Normalize for plug load
+        - lambda: if (x < 0.0260) return 0; else return (x - 0.0260);
     voltage:
-      name: "${friendly_name} Voltage"
+      name: '${friendly_name} Voltage'
 
     power:
-      name: "${friendly_name} Power"
+      name: '${friendly_name} Power'
       id: socket_my_power
       unit_of_measurement: W
       filters:
-          - calibrate_linear:
-            - 0.0000 -> 0.5900 # Relay off no load
-            - 0.0000 -> 1.5600 # Relay on no load
+        - calibrate_linear:
+            - 0.0000 -> 0.5900  # Relay off no load
+            - 0.0000 -> 1.5600  # Relay on no load
             - 198.5129 -> 87.8300
             - 434.2469 -> 189.5000
             - 628.6241 -> 273.9000
             - 1067.0067 -> 460.1000
             - 1619.8098 -> 699.2000
             - 2043.0282 -> 885.0000
-          # Normalize for plug load
-          - lambda: if (x < 1.5600) return 0; else return (x - 1.5600);
+        # Normalize for plug load
+        - lambda: if (x < 1.5600) return 0; else return (x - 1.5600);
     change_mode_every: 1
     update_interval: 1s
 
   - platform: total_daily_energy
-    name: "${friendly_name} Total Daily Energy"
+    name: '${friendly_name} Total Daily Energy'
     power_id: socket_my_power
     unit_of_measurement: kWh
     filters:
       - multiply: 0.001
 
-
 switch:
   - platform: gpio
-    name: "${friendly_name}"
+    name: '${friendly_name}'
     pin: GPIO14
     restore_mode: ${restore_mode}
     id: relay
@@ -81,6 +83,3 @@ status_led:
   pin:
     number: GPIO13
     inverted: true
-
-# time:
-#   - platform: sntp

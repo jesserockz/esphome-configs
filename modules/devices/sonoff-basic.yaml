@@ -1,9 +1,10 @@
+---
 binary_sensor:
   - platform: gpio
     pin:
       number: GPIO0
       mode: INPUT_PULLUP
-      inverted: True
+      inverted: true
     name: '${friendly_name} Button'
     on_press:
       then:
@@ -30,11 +31,11 @@ binary_sensor:
       then:
         - binary_sensor.template.publish:
             id: switch_clicker
-            state: ON
+            state: true
         - delay: 100ms
         - binary_sensor.template.publish:
             id: switch_clicker
-            state: OFF
+            state: false
 
   - platform: template
     id: switch_clicker
@@ -89,4 +90,4 @@ switch:
 status_led:
   pin:
     number: GPIO13
-    inverted: yes
+    inverted: true

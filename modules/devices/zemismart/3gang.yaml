@@ -1,3 +1,4 @@
+---
 packages:
   common: !include ../../common-8266.yaml
 
@@ -16,9 +17,9 @@ binary_sensor:
           - if:
               condition:
                 or:
-                  - lambda: "return ${switch_relay_1};"
+                  - lambda: 'return ${switch_relay_1};'
                   - not:
-                    - api.connected:
+                      - api.connected:
                   - ${relay_1_type}.is_off: '${relay_1_type}1'
               then:
                 - ${relay_1_type}.toggle: '${relay_1_type}1'
@@ -27,7 +28,7 @@ binary_sensor:
               data:
                 device: ${name}
                 action: click
-                button: "1"
+                button: '1'
       - timing:
           - ON for at most 0.5s
           - OFF for at most 0.5s
@@ -39,7 +40,7 @@ binary_sensor:
               data:
                 device: ${name}
                 action: double_click
-                button: "1"
+                button: '1'
       - timing:
           - ON for at most 0.5s
           - OFF for at most 0.5s
@@ -55,7 +56,7 @@ binary_sensor:
               data:
                 device: ${name}
                 action: four_clicks
-                button: "1"
+                button: '1'
           - ${relay_1_type}.toggle: '${relay_1_type}1'
       - timing:
           - 'ON for at least ${button_1_hold}'
@@ -66,7 +67,7 @@ binary_sensor:
               data:
                 device: ${name}
                 action: hold
-                button: "1"
+                button: '1'
 
   - platform: gpio
     pin:
@@ -82,9 +83,9 @@ binary_sensor:
           - if:
               condition:
                 or:
-                  - lambda: "return ${switch_relay_2};"
+                  - lambda: 'return ${switch_relay_2};'
                   - not:
-                    - api.connected:
+                      - api.connected:
                   - ${relay_2_type}.is_off: '${relay_2_type}2'
               then:
                 - ${relay_2_type}.toggle: '${relay_2_type}2'
@@ -93,7 +94,7 @@ binary_sensor:
               data:
                 device: ${name}
                 action: click
-                button: "2"
+                button: '2'
       - timing:
           - ON for at most 0.5s
           - OFF for at most 0.5s
@@ -105,7 +106,7 @@ binary_sensor:
               data:
                 device: ${name}
                 action: double_click
-                button: "2"
+                button: '2'
       - timing:
           - ON for at most 0.5s
           - OFF for at most 0.5s
@@ -121,7 +122,7 @@ binary_sensor:
               data:
                 device: ${name}
                 action: four_clicks
-                button: "2"
+                button: '2'
           - ${relay_2_type}.toggle: '${relay_2_type}2'
       - timing:
           - 'ON for at least ${button_2_hold}'
@@ -132,7 +133,7 @@ binary_sensor:
               data:
                 device: ${name}
                 action: hold
-                button: "2"
+                button: '2'
 
   - platform: gpio
     pin:
@@ -148,9 +149,9 @@ binary_sensor:
           - if:
               condition:
                 or:
-                  - lambda: "return ${switch_relay_3};"
+                  - lambda: 'return ${switch_relay_3};'
                   - not:
-                    - api.connected:
+                      - api.connected:
                   - ${relay_3_type}.is_off: '${relay_3_type}3'
               then:
                 - ${relay_3_type}.toggle: '${relay_3_type}3'
@@ -159,7 +160,7 @@ binary_sensor:
               data:
                 device: ${name}
                 action: click
-                button: "3"
+                button: '3'
       - timing:
           - ON for at most 0.5s
           - OFF for at most 0.5s
@@ -171,7 +172,7 @@ binary_sensor:
               data:
                 device: ${name}
                 action: double_click
-                button: "3"
+                button: '3'
       - timing:
           - ON for at most 0.5s
           - OFF for at most 0.5s
@@ -187,7 +188,7 @@ binary_sensor:
               data:
                 device: ${name}
                 action: four_clicks
-                button: "3"
+                button: '3'
           - ${relay_3_type}.toggle: '${relay_3_type}3'
       - timing:
           - 'ON for at least ${button_3_hold}'
@@ -198,7 +199,7 @@ binary_sensor:
               data:
                 device: ${name}
                 action: hold
-                button: "3"
+                button: '3'
 
 output:
   - platform: gpio
@@ -231,7 +232,7 @@ light:
     disabled_by_default: true
     pin:
       number: GPIO2
-      inverted: True
+      inverted: true
 
 substitutions:
   relay_1_type: switch

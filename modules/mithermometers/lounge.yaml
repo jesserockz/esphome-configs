@@ -1,3 +1,4 @@
+---
 sensor:
   - platform: pvvx_mithermometer
     mac_address: A4:C1:38:3D:D5:9D

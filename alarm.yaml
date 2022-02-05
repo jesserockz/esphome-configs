@@ -1,3 +1,4 @@
+---
 substitutions:
   name: alarm
   friendly_name: Alarm
@@ -13,6 +14,7 @@ substitutions:
   pending_state: '5'
   triggered_state: '6'
 
+  # yamllint disable-line rule:line-length
   state_strings: '{"disarmed", "arming", "armed_away", "armed_home", "armed_night", "pending", "triggered"}'
 
   pir_1: 'Master'
@@ -115,9 +117,9 @@ script:
                   - state_machine.state: armed_home
                   - state_machine.state: armed_night
               - or:
-                - lambda: return id(pir_1_value).state > 0;
-                - lambda: return id(pir_2_value).state > 0;
-                - lambda: return id(pir_3_value).state > 0;
+                  - lambda: return id(pir_1_value).state > 0;
+                  - lambda: return id(pir_2_value).state > 0;
+                  - lambda: return id(pir_3_value).state > 0;
           then:
             - state_machine.transition: motion
 

@@ -1,3 +1,4 @@
+---
 substitutions:
   wifi_reboot_timeout: 5min
 

@@ -1,3 +1,4 @@
+---
 light:
   - platform: binary
     id: light2

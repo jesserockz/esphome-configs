@@ -1,20 +1,21 @@
+---
 packages:
   common: !include common.yaml
 
 status_led:
   pin:
     number: GPIO13
-    inverted: yes
+    inverted: true
 
 binary_sensor:
   - platform: gpio
     name: '${friendly_name} Button'
     pin:
       number: 0
-      inverted: True
+      inverted: true
       mode: INPUT_PULLUP
     on_multi_click:
-      - timing: # double click
+      - timing:  # double click
           - ON for at most 1s
           - OFF for at most 0.5s
           - ON for at most 1s
@@ -25,7 +26,7 @@ binary_sensor:
               data:
                 switch: $devicename
                 action: double_click
-      - timing: # long click
+      - timing:  # long click
           - ON for 1s to 2s
           - OFF for at least 0.5s
         then:
@@ -34,7 +35,7 @@ binary_sensor:
               data:
                 switch: $devicename
                 action: long_click
-      - timing: # really long click
+      - timing:  # really long click
           - ON for at least 5s
         then:
           - homeassistant.event:
@@ -42,7 +43,7 @@ binary_sensor:
               data:
                 switch: $devicename
                 action: really_long_click
-      - timing: # short click
+      - timing:  # short click
           - ON for at most 1s
           - OFF for at least 0.5s
         then:
@@ -52,7 +53,7 @@ binary_sensor:
               data:
                 switch: $devicename
                 action: click
-      - timing: # four clicks
+      - timing:  # four clicks
           - ON for at most 1s
           - OFF for at most 0.5s
           - ON for at most 1s
@@ -63,17 +64,17 @@ binary_sensor:
 switch:
   - platform: gpio
     id: relay
-    pin: 14
+    pin: GPIO14
     name: '${friendly_name} Relay'
     restore_mode: ${restore_mode}
 
 sensor:
   - platform: hlw8012
     sel_pin:
-      number: 12
-      inverted: True
-    cf_pin: 4
-    cf1_pin: 5
+      number: GPIO12
+      inverted: true
+    cf_pin: GPIO4
+    cf1_pin: GPIO5
     voltage:
       name: '${friendly_name} Voltage'
       id: voltage_id
@@ -109,8 +110,8 @@ sensor:
         - heartbeat: 10s
     update_interval: 1s
     change_mode_every: 4
-    voltage_divider: $voltage_divider # Lower value gives lower voltage readout
-    current_resistor: $current_resistor # Higher value gives lower watt readout
+    voltage_divider: $voltage_divider  # Lower value gives lower voltage readout
+    current_resistor: $current_resistor  # Higher value gives lower watt readout
 
   - platform: template
     name: '${friendly_name} Apparent Power'

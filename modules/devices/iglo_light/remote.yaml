@@ -1,3 +1,4 @@
+---
 remote_receiver:
   pin:
     number: GPIO2
@@ -7,169 +8,171 @@ remote_receiver:
   # - raw
   on_samsung:
     then:
-    - homeassistant.event:
-        event: esphome.ir_code_received
-        data:
-          type: samsung
-          data: !lambda 'char buffer [10];return itoa(x.data,buffer,16);'
-          source: light.$devicename
+      - homeassistant.event:
+          event: esphome.ir_code_received
+          data:
+            type: samsung
+            data: !lambda 'char buffer [10];return itoa(x.data,buffer,16);'
+            source: light.$devicename
 
   on_nec:
     then:
-    - homeassistant.event:
-        event: esphome.ir_code_received
-        data:
-          type: nec
-          address: !lambda 'char buffer [10];return itoa(x.address,buffer,16);'
-          command: !lambda 'char buffer [10];return itoa(x.command,buffer,16);'
-          source: light.$devicename
+      - homeassistant.event:
+          event: esphome.ir_code_received
+          data:
+            type: nec
+            address: !lambda 'char buffer [10];return itoa(x.address,buffer,16);'
+            command: !lambda 'char buffer [10];return itoa(x.command,buffer,16);'
+            source: light.$devicename
 
   on_jvc:
     then:
-    - homeassistant.event:
-        event: esphome.ir_code_received
-        data:
-          data: !lambda 'char buffer [10];return itoa(x.data,buffer,16);'
-          type: jvc
-          source: light.$devicename
+      - homeassistant.event:
+          event: esphome.ir_code_received
+          data:
+            data: !lambda 'char buffer [10];return itoa(x.data,buffer,16);'
+            type: jvc
+            source: light.$devicename
 
-    - if:
-        condition:
-          lambda: 'return x.data == 0x10EF;'
-        then:
-        - light.toggle: the_light
+      - if:
+          condition:
+            lambda: 'return x.data == 0x10EF;'
+          then:
+            - light.toggle: the_light
 
-    - if:
-        condition:
-          lambda: 'return x.data == 0xF00F;'
-        then:
-        - script.execute: effect_red
+      - if:
+          condition:
+            lambda: 'return x.data == 0xF00F;'
+          then:
+            - script.execute: effect_red
 
-    - if:
-        condition:
-          lambda: 'return x.data == 0xB847;'
-        then:
-        - script.execute: effect_green
+      - if:
+          condition:
+            lambda: 'return x.data == 0xB847;'
+          then:
+            - script.execute: effect_green
 
-    - if:
-        condition:
-          lambda: 'return x.data == 0x24DB;'
-        then:
-        - script.execute: effect_blue
+      - if:
+          condition:
+            lambda: 'return x.data == 0x24DB;'
+          then:
+            - script.execute: effect_blue
 
-    - if:
-        condition:
-          lambda: 'return x.data == 0x6897;'
-        then:
-        - script.execute: effect_yellow
+      - if:
+          condition:
+            lambda: 'return x.data == 0x6897;'
+          then:
+            - script.execute: effect_yellow
 
-    - if:
-        condition:
-          lambda: 'return x.data == 0x6498;' # 1 - 1
-        then:
-        - script.execute: effect_candle
+      - if:
+          condition:
+            lambda: 'return x.data == 0x6498;'  # 1 - 1
+          then:
+            - script.execute: effect_candle
 
-    - if:
-        condition:
-          lambda: 'return x.data == 0xF807;' # 1 - 2
-        then:
-        - script.execute: effect_warm
+      - if:
+          condition:
+            lambda: 'return x.data == 0xF807;'  # 1 - 2
+          then:
+            - script.execute: effect_warm
 
-    - if:
-        condition:
-          lambda: 'return x.data == 0x18E7;' # 1 - 3
-        then:
-        - script.execute: effect_natural
+      - if:
+          condition:
+            lambda: 'return x.data == 0x18E7;'  # 1 - 3
+          then:
+            - script.execute: effect_natural
 
-    - if:
-        condition:
-          lambda: 'return x.data == 0x8877;' # 1 - 4
-        then:
-        - script.execute: effect_snow
+      - if:
+          condition:
+            lambda: 'return x.data == 0x8877;'  # 1 - 4
+          then:
+            - script.execute: effect_snow
 
-    - if:
-        condition:
-          lambda: 'return x.data == 0xE41B;' # 2 - 1
-        then:
-        - script.execute: effect_night
+      - if:
+          condition:
+            lambda: 'return x.data == 0xE41B;'  # 2 - 1
+          then:
+            - script.execute: effect_night
 
-    - if:
-        condition:
-          lambda: 'return x.data == 0x04FB;' # 2 - 2
-        then:
-        - script.execute: effect_relax
+      - if:
+          condition:
+            lambda: 'return x.data == 0x04FB;'  # 2 - 2
+          then:
+            - script.execute: effect_relax
 
-    - if:
-        condition:
-          lambda: 'return x.data == 0x9867;' # 2 - 3
-        then:
-        - script.execute: effect_reading
+      - if:
+          condition:
+            lambda: 'return x.data == 0x9867;'  # 2 - 3
+          then:
+            - script.execute: effect_reading
 
-    - if:
-        condition:
-          lambda: 'return x.data == 0x48B7;' # 2 - 4
-        then:
-        - script.execute: effect_work
+      - if:
+          condition:
+            lambda: 'return x.data == 0x48B7;'  # 2 - 4
+          then:
+            - script.execute: effect_work
 
-    - if:
-        condition:
-          lambda: 'return x.data == 0x14EB;' # 3 - 1
-        then:
-        - script.execute: effect_sleep
+      - if:
+          condition:
+            lambda: 'return x.data == 0x14EB;'  # 3 - 1
+          then:
+            - script.execute: effect_sleep
 
-    - if:
-        condition:
-          lambda: 'return x.data == 0x847B;' # 3 - 2
-        then:
-        - script.execute: effect_sleep
+      - if:
+          condition:
+            lambda: 'return x.data == 0x847B;'  # 3 - 2
+          then:
+            - script.execute: effect_sleep
 
-    - if:
-        condition:
-          lambda: 'return x.data == 0x58A7;' # 3 - 3
-        then:
-        - script.execute: effect_sleep
+      - if:
+          condition:
+            lambda: 'return x.data == 0x58A7;'  # 3 - 3
+          then:
+            - script.execute: effect_sleep
 
-    - if:
-        condition:
-          lambda: 'return x.data == 0xC837;' # 3 - 4
-        then:
-        - script.execute: effect_sleep
+      - if:
+          condition:
+            lambda: 'return x.data == 0xC837;'  # 3 - 4
+          then:
+            - script.execute: effect_sleep
 
-    - if:
-        condition:
-          lambda: 'return x.data == 0x54AB;' # 4 - 1
-        then:
-        - script.execute: effect_sleep
-
-      # - if:
-          # condition:
-            # lambda: 'return x.data == 0xC43B;' # 4 - 2
-          # then:
-            # - script.execute: effect_sleep
+      - if:
+          condition:
+            lambda: 'return x.data == 0x54AB;'  # 4 - 1
+          then:
+            - script.execute: effect_sleep
 
       # - if:
-          # condition:
-            # lambda: 'return x.data == 0x38C7;' # 4 - 3
-          # then:
-            # - script.execute: effect_sleep
+      # condition:
+      # lambda: 'return x.data == 0xC43B;'  # 4 - 2
+      # then:
+      # - script.execute: effect_sleep
 
-    - if:
-        condition:
-          lambda: 'return x.data == 0xA857;' # 4 - 4
-        then:
-        - script.execute: effect_sleep
+      # - if:
+      # condition:
+      # lambda: 'return x.data == 0x38C7;'  # 4 - 3
+      # then:
+      # - script.execute: effect_sleep
 
-    - if:
-        condition:
-          lambda: 'return x.data == 0x7887;'
-        then:
-        - light.turn_on:
-            id: the_light
-            brightness: !lambda return id(the_light).current_values.get_brightness() - 0.1;
-    - if:
-        condition:
-          lambda: 'return x.data == 0xE817;'
-        then:
-        - light.turn_on:
-            id: the_light
-            brightness: !lambda 'return id(the_light).current_values.get_brightness() + 0.1;'
+      - if:
+          condition:
+            lambda: 'return x.data == 0xA857;'  # 4 - 4
+          then:
+            - script.execute: effect_sleep
+
+      - if:
+          condition:
+            lambda: 'return x.data == 0x7887;'
+          then:
+            - light.turn_on:
+                id: the_light
+                brightness: !lambda |-
+                  return id(the_light).current_values.get_brightness() - 0.1;
+      - if:
+          condition:
+            lambda: 'return x.data == 0xE817;'
+          then:
+            - light.turn_on:
+                id: the_light
+                brightness: !lambda |-
+                  'return id(the_light).current_values.get_brightness() + 0.1;'
