@@ -1,0 +1,55 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: 0 10 * * *
+
+jobs:
+  yamllint:
+    name: 🧹 yamllint
+    runs-on: ubuntu-latest
+    steps:
+      - name: ⤵️ Check out configuration from GitHub
+        uses: actions/checkout@v2.4.0
+      - name: 🚀 Run yamllint
+        uses: frenck/action-yamllint@v1.1.2
+
+  prepare:
+    runs-on: ubuntu-latest
+    needs:
+      - yamllint
+    outputs:
+      files: ${{ steps.files-array.outputs.files }}
+    steps:
+      - name: ⤵️ Check out configuration from GitHub
+        uses: actions/checkout@v2.4.0
+      - name: Build files array
+        id: files-array
+        run: |
+          files=$(find . -maxdepth 1 -type f -name "*.yaml" -not -name "secrets.yaml" -not -name "secrets.ci.yaml" | jq -Rcns 'inputs | . / "\n" | map(select(length > 0) | sub("./";"")) ')
+          echo ::set-output name=files::$files
+
+  configs:
+    runs-on: ubuntu-latest
+    name: "Validate ESPHome config: ${{ matrix.file }}"
+    needs:
+      - yamllint
+      - prepare
+    strategy:
+      matrix:
+        file: ${{ fromJson(needs.prepare.outputs.files) }}
+    steps:
+      - name: ⤵️ Check out configuration from GitHub
+        uses: actions/checkout@v2.4.0
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v2.3.1
+        with:
+          python-version: 3.9
+      - name: Install ESPHome
+        run: pip install esphome
+      - name: Rename stub secrets
+        run: mv ./secrets.ci.yaml ./secrets.yaml
+      - name: Run ESPHome config
+        run: esphome config ${{ matrix.file }}
