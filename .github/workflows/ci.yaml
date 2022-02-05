@@ -46,6 +46,7 @@ jobs:
     strategy:
       matrix:
         file: ${{ fromJson(needs.prepare.outputs.files) }}
+      fail-fast: false
     steps:
       - name: ⤵️ Check out configuration from GitHub
         uses: actions/checkout@v2.4.0
