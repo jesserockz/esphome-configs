@@ -1,3 +1,4 @@
+---
 substitutions:
   board: esp32dev
 

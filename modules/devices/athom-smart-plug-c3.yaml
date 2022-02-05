@@ -1,25 +1,21 @@
 ---
 substitutions:
-  board: esp8285
-  restore_mode: ALWAYS_OFF
+  restore_mode: RESTORE_DEFAULT_OFF
 
-packages:
-  common: !include ../common-8266.yaml
+logger:
+  baud_rate: 0
+  deassert_rts_dtr: true
 
 uart:
-  rx_pin: GPIO3
+  rx_pin: RX
   baud_rate: 4800
 
 binary_sensor:
   - platform: gpio
     pin:
-      number: 5
-      mode:
-        input: true
-        pullup: true
+      number: GPIO9
       inverted: true
     name: "${friendly_name} Power Button"
-    disabled_by_default: true
     on_multi_click:
       - timing:
           - ON for at most 1s
@@ -33,30 +29,33 @@ binary_sensor:
 
 sensor:
   - platform: cse7766
-    update_interval: 10s
+    update_interval: 5s
     current:
       name: "${friendly_name} Current"
     voltage:
       name: "${friendly_name} Voltage"
     power:
       name: "${friendly_name} Power"
-      id: socket_my_power
-    energy:
-      name: "${friendly_name} Energy"
-      unit_of_measurement: kWh
-      filters:
-        - multiply: 0.001
+      id: power
+
+  - platform: total_daily_energy
+    name: "${friendly_name} Total Daily Energy"
+    power_id: power
+    unit_of_measurement: kWh
+    accuracy_decimals: 3
+    filters:
+      - multiply: 0.001
 
 switch:
   - platform: gpio
     name: "${friendly_name}"
-    pin: GPIO12
-    restore_mode: ${restore_mode}
+    pin: GPIO3
     id: relay
+    restore_mode: ${restore_mode}
 
 light:
   - platform: status_led
-    name: "${friendly_name} Status LED"
+    name: "${friendly_name} Blue LED"
     pin:
-      number: GPIO13
       inverted: true
+      number: GPIO8

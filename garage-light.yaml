@@ -1,3 +1,4 @@
+---
 substitutions:
   name: garage-light
   friendly_name: Garage Light
@@ -6,4 +7,4 @@ substitutions:
   light_name: Garage
 
 packages:
-  light: !include modules/devices/athom-rgbct-15w.yaml
+  light: !include modules/devices/athom-rgbct-light.yaml

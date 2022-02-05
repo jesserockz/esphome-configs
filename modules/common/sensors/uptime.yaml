@@ -1,3 +1,4 @@
+---
 platform: uptime
 name: "${friendly_name} Uptime"
 id: uptime_sensor

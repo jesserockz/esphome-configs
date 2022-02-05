@@ -1,3 +1,4 @@
+---
 packages:
   remote: !include iglo_light/remote.yaml
 
@@ -37,4 +38,4 @@ light:
     warm_white: warm_output
     cold_white_color_temperature: 153 mireds
     warm_white_color_temperature: 500 mireds
-    color_interlock: True
+    color_interlock: true

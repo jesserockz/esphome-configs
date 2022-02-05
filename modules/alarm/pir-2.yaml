@@ -1,3 +1,4 @@
+---
 sensor:
   - platform: adc
     id: pir_2_raw
@@ -34,7 +35,9 @@ sensor:
       - text_sensor.template.publish:
           id: pir_2_state
           state: !lambda |-
-            static std::array<std::string, 5> strings = {"Normal", "Short", "Motion", "Tamper", "Uhm???"};
+            static std::array<std::string, 5> strings = {
+              "Normal", "Short", "Motion", "Tamper", "Uhm???"
+            };
             return strings[x];
 
       - if:
@@ -73,11 +76,10 @@ sensor:
                       id: pir_2_tamper
                       state: true
 
-
 text_sensor:
   - platform: template
     name: ${friendly_name} ${pir_2} PIR
-    icon: "mdi:lock-alert"
+    icon: 'mdi:lock-alert'
     id: pir_2_state
     update_interval: never
     entity_category: diagnostic

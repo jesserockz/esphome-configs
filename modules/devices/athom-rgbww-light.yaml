@@ -1,3 +1,4 @@
+---
 substitutions:
   restore_mode: RESTORE_DEFAULT_ON
   light_name: "${friendly_name}"
@@ -22,7 +23,6 @@ output:
   - platform: esp8266_pwm
     id: white_output
     pin: GPIO5
-
 
 light:
   - platform: rgbww

@@ -1,3 +1,4 @@
+---
 substitutions:
   light_name: ${friendly_name}
   restore_mode: RESTORE_DEFAULT_ON

@@ -1,3 +1,4 @@
+---
 substitutions:
   fan_name: ${friendly_name}
 
