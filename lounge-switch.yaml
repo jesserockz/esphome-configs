@@ -10,4 +10,4 @@ substitutions:
 packages:
   zemismart: !include modules/devices/zemismart/3gang.yaml
 
-  wizmote: !include modules/wizmote.yml
+  wizmote: !include modules/wizmote.yaml

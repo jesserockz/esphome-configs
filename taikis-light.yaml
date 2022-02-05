@@ -6,4 +6,4 @@ substitutions:
   light_name: Taiki's Room
 
 packages:
-  light: !include modules/devices/athom-rgbct-light.yml
+  light: !include modules/devices/athom-rgbct-light.yaml

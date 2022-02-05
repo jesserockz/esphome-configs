@@ -70,9 +70,9 @@ substitutions:
 
 packages:
   common: !include modules/common-32-idf.yaml
-  master: !include modules/alarm/pir-1.yml
-  garage: !include modules/alarm/pir-2.yml
-  lounge: !include modules/alarm/pir-3.yml
+  master: !include modules/alarm/pir-1.yaml
+  garage: !include modules/alarm/pir-2.yaml
+  lounge: !include modules/alarm/pir-3.yaml
 
 external_components:
   source: github://muxa/esphome-state-machine

@@ -5,7 +5,7 @@ substitutions:
   light_name: Back Door
 
 packages:
-  switch: !include modules/devices/athom-sw01.yml
+  switch: !include modules/devices/athom-sw01.yaml
 
 logger:
   baud_rate: 0

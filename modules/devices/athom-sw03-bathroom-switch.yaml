@@ -1,3 +1,6 @@
+packages:
+  common: !include ../common-8266.yaml
+
 binary_sensor:
   # Touch Buttons
   - platform: gpio

@@ -1,11 +1,10 @@
 substitutions:
-  devicename: ensuite-switch
+  name: ensuite-switch
   friendly_name: Ensuite
   wifi_reboot_timeout: 5min
 
 packages:
-  common: !include modules/common.yaml
-  switch: !include modules/athom-sw03-bathroom-switch.yml
+  switch: !include modules/devices/athom-sw03-bathroom-switch.yaml
 
 logger:
   baud_rate: 0

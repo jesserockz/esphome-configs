@@ -6,4 +6,4 @@ substitutions:
   light_name: Garage
 
 packages:
-  light: !include modules/devices/athom-rgbct-15w.yml
+  light: !include modules/devices/athom-rgbct-15w.yaml
