@@ -9,11 +9,4 @@ esp32:
     type: esp-idf
 
 packages:
-  wifi: !include common/wifi.yaml
-  ota: !include common/ota.yaml
-  sensors: !include common/sensors.yaml
-  binary_sensors: !include common/binary_sensors.yaml
-  time: !include common/time.yaml
-  logger: !include common/logger.yaml
-  api: !include common/api.yaml
-  switches: !include common/switches.yaml
+  base: !include common-base.yaml
