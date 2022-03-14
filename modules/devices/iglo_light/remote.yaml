@@ -13,7 +13,7 @@ remote_receiver:
           data:
             type: samsung
             data: !lambda 'char buffer [10];return itoa(x.data,buffer,16);'
-            source: light.$devicename
+            source: light.$name
 
   on_nec:
     then:
@@ -23,7 +23,7 @@ remote_receiver:
             type: nec
             address: !lambda 'char buffer [10];return itoa(x.address,buffer,16);'
             command: !lambda 'char buffer [10];return itoa(x.command,buffer,16);'
-            source: light.$devicename
+            source: light.$name
 
   on_jvc:
     then:
@@ -32,7 +32,7 @@ remote_receiver:
           data:
             data: !lambda 'char buffer [10];return itoa(x.data,buffer,16);'
             type: jvc
-            source: light.$devicename
+            source: light.$name
 
       - if:
           condition:

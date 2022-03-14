@@ -1,6 +1,9 @@
 ---
 packages:
-  common: !include common.yaml
+  common: !include ../common-8266.yaml
+
+esp8266:
+  restore_from_flash: true
 
 binary_sensor:
   - platform: gpio
@@ -21,6 +24,7 @@ binary_sensor:
           - ON for at least 4s
         then:
           - button.press: restart_button
+
 sensor:
   - platform: hlw8012
     sel_pin:
@@ -79,7 +83,9 @@ switch:
     restore_mode: ${restore_mode}
     id: relay
 
-status_led:
-  pin:
-    number: GPIO13
-    inverted: true
+light:
+  - platform: status_led
+    name: "${friendly_name} Status LED"
+    pin:
+      number: GPIO13
+      inverted: true

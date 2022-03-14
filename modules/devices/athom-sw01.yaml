@@ -7,7 +7,7 @@ packages:
   common: !include ../common-8266.yaml
 
 binary_sensor:
-  # Touch Button
+  # Switch
   - platform: gpio
     pin:
       inverted: true
@@ -17,9 +17,25 @@ binary_sensor:
     on_multi_click:
       - timing:
           - ON for at most 0.5s
-          - OFF for at least 0.2s
+          - OFF for at least 0.5s
         then:
+          - homeassistant.event:
+              event: esphome.switch
+              data:
+                device: ${name}
+                action: click
           - light.toggle: light1
+      - timing:
+          - ON for at most 0.5s
+          - OFF for at most 0.5s
+          - ON for at most 0.5s
+          - OFF for at least 0.5s
+        then:
+          - homeassistant.event:
+              event: esphome.switch
+              data:
+                device: ${name}
+                action: double_click
       - timing:
           - ON for at least 4s
         then:
