@@ -1,0 +1,8 @@
+---
+substitutions:
+  name: master-fan-plug
+  friendly_name: Master Fan Plug
+  restore_mode: RESTORE_DEFAULT_OFF
+
+packages:
+  common: !include modules/devices/athom-smart-plug.yaml
