@@ -23,6 +23,7 @@ substitutions:
   pir_2_pin: '32'
   pir_3: 'Lounge'
   pir_3_pin: '34'
+  tamper_pin: '35'
 
   # pir_4: ''
   # pir_4_pin: ''
@@ -43,6 +44,17 @@ substitutions:
   pir_motion_max: !secret alarm_pir_motion_max
 
   pir_tamper_min: !secret alarm_pir_tamper_min
+
+  tamper_ok_value: !secret alarm_tamper_ok_value
+
+  relay_1_pin: 'GPIO27'
+  relay_2_pin: 'GPIO26'
+  relay_3_pin: 'GPIO25'
+  relay_4_pin: 'GPIO23'
+  relay_5_pin: 'GPIO22'
+  relay_6_pin: 'GPIO21'
+  relay_7_pin: 'GPIO19'
+  relay_8_pin: 'GPIO18'
 
 ######### Exposed to HA ##########
 
@@ -75,6 +87,7 @@ packages:
   master: !include modules/alarm/pir-1.yaml
   garage: !include modules/alarm/pir-2.yaml
   lounge: !include modules/alarm/pir-3.yaml
+  tamper: !include modules/alarm/tamper.yaml
 
 external_components:
   source: github://muxa/esphome-state-machine
@@ -135,10 +148,54 @@ globals:
 
 switch:
   - platform: gpio
-    pin: GPIO2
+    pin:
+      inverted: true
+      number: ${relay_1_pin}
     restore_mode: ALWAYS_OFF
     id: siren
-    name: ${friendly_name} Siren
+    name: ${friendly_name} Indoor Siren
+  - platform: gpio
+    pin:
+      inverted: true
+      number: ${relay_2_pin}
+    restore_mode: ALWAYS_OFF
+    name: ${friendly_name} Outdoor Siren
+  # - platform: gpio
+  #   pin:
+  #     inverted: true
+  #     number: ${relay_3_pin}
+  #   restore_mode: ALWAYS_OFF
+  #   name: ${friendly_name} Relay 3
+  # - platform: gpio
+  #   pin:
+  #     inverted: true
+  #     number: ${relay_4_pin}
+  #   restore_mode: ALWAYS_OFF
+  #   name: ${friendly_name} Relay 4
+  # - platform: gpio
+  #   pin:
+  #     inverted: true
+  #     number: ${relay_5_pin}
+  #   restore_mode: ALWAYS_OFF
+  #   name: ${friendly_name} Relay 5
+  # - platform: gpio
+  #   pin:
+  #     inverted: true
+  #     number: ${relay_6_pin}
+  #   restore_mode: ALWAYS_OFF
+  #   name: ${friendly_name} Relay 6
+  # - platform: gpio
+  #   pin:
+  #     inverted: true
+  #     number: ${relay_7_pin}
+  #   restore_mode: ALWAYS_OFF
+  #   name: ${friendly_name} Relay 7
+  # - platform: gpio
+  #   pin:
+  #     inverted: true
+  #     number: ${relay_8_pin}
+  #   restore_mode: ALWAYS_OFF
+  #   name: ${friendly_name} Relay 8
 
 sensor:
   - platform: template
