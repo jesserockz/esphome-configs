@@ -1,3 +1,4 @@
+---
 xiaomi_rtcgq02lm:
   - id: motion_hallway
     bindkey: '8f029cadbd87702e2a7f41c68a64b616'

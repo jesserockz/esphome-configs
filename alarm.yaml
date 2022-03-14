@@ -160,42 +160,42 @@ switch:
       number: ${relay_2_pin}
     restore_mode: ALWAYS_OFF
     name: ${friendly_name} Outdoor Siren
-  # - platform: gpio
-  #   pin:
-  #     inverted: true
-  #     number: ${relay_3_pin}
-  #   restore_mode: ALWAYS_OFF
-  #   name: ${friendly_name} Relay 3
-  # - platform: gpio
-  #   pin:
-  #     inverted: true
-  #     number: ${relay_4_pin}
-  #   restore_mode: ALWAYS_OFF
-  #   name: ${friendly_name} Relay 4
-  # - platform: gpio
-  #   pin:
-  #     inverted: true
-  #     number: ${relay_5_pin}
-  #   restore_mode: ALWAYS_OFF
-  #   name: ${friendly_name} Relay 5
-  # - platform: gpio
-  #   pin:
-  #     inverted: true
-  #     number: ${relay_6_pin}
-  #   restore_mode: ALWAYS_OFF
-  #   name: ${friendly_name} Relay 6
-  # - platform: gpio
-  #   pin:
-  #     inverted: true
-  #     number: ${relay_7_pin}
-  #   restore_mode: ALWAYS_OFF
-  #   name: ${friendly_name} Relay 7
-  # - platform: gpio
-  #   pin:
-  #     inverted: true
-  #     number: ${relay_8_pin}
-  #   restore_mode: ALWAYS_OFF
-  #   name: ${friendly_name} Relay 8
+    # - platform: gpio
+    #   pin:
+    #     inverted: true
+    #     number: ${relay_3_pin}
+    #   restore_mode: ALWAYS_OFF
+    #   name: ${friendly_name} Relay 3
+    # - platform: gpio
+    #   pin:
+    #     inverted: true
+    #     number: ${relay_4_pin}
+    #   restore_mode: ALWAYS_OFF
+    #   name: ${friendly_name} Relay 4
+    # - platform: gpio
+    #   pin:
+    #     inverted: true
+    #     number: ${relay_5_pin}
+    #   restore_mode: ALWAYS_OFF
+    #   name: ${friendly_name} Relay 5
+    # - platform: gpio
+    #   pin:
+    #     inverted: true
+    #     number: ${relay_6_pin}
+    #   restore_mode: ALWAYS_OFF
+    #   name: ${friendly_name} Relay 6
+    # - platform: gpio
+    #   pin:
+    #     inverted: true
+    #     number: ${relay_7_pin}
+    #   restore_mode: ALWAYS_OFF
+    #   name: ${friendly_name} Relay 7
+    # - platform: gpio
+    #   pin:
+    #     inverted: true
+    #     number: ${relay_8_pin}
+    #   restore_mode: ALWAYS_OFF
+    #   name: ${friendly_name} Relay 8
 
 sensor:
   - platform: template
