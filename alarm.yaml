@@ -147,19 +147,46 @@ globals:
     initial_value: '0'
 
 switch:
+  - platform: template
+    name: ${friendly_name} Config Mode
+    icon: mdi:shield-edit
+    optimistic: true
+    entity_category: config
+
+  - platform: template
+    name: ${friendly_name} Trigger Indoor Siren
+    id: trigger_indoor_siren
+    icon: mdi:bullhorn
+    optimistic: true
+    entity_category: config
+    restore_state: true
+
+  - platform: template
+    name: ${friendly_name} Trigger Outdoor Siren
+    id: trigger_outdoor_siren
+    icon: mdi:bullhorn
+    optimistic: true
+    entity_category: config
+    restore_state: true
+
   - platform: gpio
     pin:
       inverted: true
       number: ${relay_1_pin}
     restore_mode: ALWAYS_OFF
-    id: siren
+    id: indoor_siren
     name: ${friendly_name} Indoor Siren
+    icon: mdi:bullhorn
+
   - platform: gpio
     pin:
       inverted: true
       number: ${relay_2_pin}
     restore_mode: ALWAYS_OFF
+    id: outdoor_siren
     name: ${friendly_name} Outdoor Siren
+    icon: mdi:bullhorn
+
     # - platform: gpio
     #   pin:
     #     inverted: true
@@ -219,10 +246,8 @@ sensor:
     update_interval: never
 
 text_sensor:
-  # - platform: template
   - platform: state_machine
     id: alarm_state_text
-    # update_interval: never
     name: ${friendly_name} State
 
 number:
@@ -302,7 +327,16 @@ state_machine:
 
     - name: 'triggered'
       on_enter:
-        - switch.turn_on: siren
+        - if:
+            condition:
+              switch.is_on: trigger_indoor_siren
+            then:
+              - switch.turn_on: indoor_siren
+        - if:
+            condition:
+              switch.is_on: trigger_outdoor_siren
+            then:
+              - switch.turn_on: outdoor_siren
         - homeassistant.event:
             event: esphome.alarm_buzzer_start
             data:
@@ -312,7 +346,8 @@ state_machine:
         - delay: !lambda return id(trigger_timeout).state * 60 * 1000;
         - state_machine.transition: arm_away
       on_leave:
-        - switch.turn_off: siren
+        - switch.turn_off: indoor_siren
+        - switch.turn_off: outdoor_siren
         - homeassistant.event:
             event: esphome.alarm_buzzer_stop
 
