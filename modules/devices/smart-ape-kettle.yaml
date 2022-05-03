@@ -1,0 +1,34 @@
+---
+substitutions:
+  board: esp8285
+
+packages:
+  common: !include ../common-8266.yaml
+
+logger:
+  baud_rate: 0
+
+uart:
+  tx_pin: TX
+  rx_pin: RX
+  baud_rate: 9600
+
+tuya:
+
+switch:
+  - platform: tuya
+    switch_datapoint: 1
+    name: ${friendly_name}
+
+sensor:
+  - platform: tuya
+    sensor_datapoint: 5
+    name: ${friendly_name} Current Temperature
+
+number:
+  - platform: tuya
+    number_datapoint: 102
+    min_value: 0
+    max_value: 5
+    step: 1
+    name: ${friendly_name} Keep Warm

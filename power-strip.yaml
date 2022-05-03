@@ -1,0 +1,7 @@
+---
+substitutions:
+  name: power-strip
+  friendly_name: Power Strip
+
+packages:
+  common: !include modules/devices/smart-ape-power-strip.yaml

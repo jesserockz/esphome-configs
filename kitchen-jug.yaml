@@ -1,0 +1,7 @@
+---
+substitutions:
+  name: kitchen-jug
+  friendly_name: Kitchen Jug
+
+packages:
+  common: !include modules/devices/smart-ape-kettle.yaml
