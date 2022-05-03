@@ -92,7 +92,6 @@ sensor:
     energy:
       name: "${friendly_name} Energy"
 
-
 switch:
   - platform: gpio
     name: "${friendly_name} 1"
