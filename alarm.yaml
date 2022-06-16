@@ -389,7 +389,7 @@ state_machine:
         - pending -> triggered
 
     - name: failed_code
-      action:
+      on_input:
         - lambda: id(incorrect_codes) += 1;
         - if:
             condition:
