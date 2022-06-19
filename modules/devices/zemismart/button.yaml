@@ -1,3 +1,4 @@
+---
 platform: gpio
 pin:
   inverted: true
