@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: ⤵️ Check out configuration from GitHub
-        uses: actions/checkout@v3.3.0
+        uses: actions/checkout@v3.4.0
       - name: 🚀 Run yamllint
         uses: frenck/action-yamllint@v1.4.0
 
@@ -28,7 +28,7 @@ jobs:
       files: ${{ steps.files-array.outputs.files }}
     steps:
       - name: ⤵️ Check out configuration from GitHub
-        uses: actions/checkout@v3.3.0
+        uses: actions/checkout@v3.4.0
       - name: Build files array
         id: files-array
         # yamllint disable rule:line-length
@@ -49,7 +49,7 @@ jobs:
       fail-fast: false
     steps:
       - name: ⤵️ Check out configuration from GitHub
-        uses: actions/checkout@v3.3.0
+        uses: actions/checkout@v3.4.0
       - name: Set up Python 3.9
         uses: actions/setup-python@v4.5.0
         with:
