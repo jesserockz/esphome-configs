@@ -1,0 +1,18 @@
+---
+substitutions:
+  inverted: 'false'
+
+binary_sensor:
+  - platform: gpio
+    id: zone${zone}
+    name: ${name}
+    device_class: ${device_class}
+    pin:
+      number: ${zone${zone}}
+      mode: INPUT_PULLUP
+      inverted: ${inverted}
+    filters:
+      - delayed_on_off: 200ms
+    on_state:
+      then:
+        - script.execute: evaluate_alarm

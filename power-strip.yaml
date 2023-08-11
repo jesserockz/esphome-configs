@@ -2,6 +2,8 @@
 substitutions:
   name: power-strip
   friendly_name: Power Strip
+  api_timeout: 0s
+  esp8266_early_pin_init: "false"
 
 packages:
   common: !include modules/devices/smart-ape-power-strip.yaml

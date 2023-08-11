@@ -21,7 +21,7 @@ modbus_controller:
 
 sensor:
   - platform: modbus_controller
-    name: '${friendly_name} Internal Temperature'
+    name: 'Internal Temperature'
     register_type: holding
     address: 4
     register_count: 2
@@ -34,7 +34,7 @@ sensor:
       return data[item->offset + 1] == 0 ? x : -x;
 
   - platform: modbus_controller
-    name: '${friendly_name} External Temperature'
+    name: 'External Temperature'
     register_type: holding
     address: 34
     register_count: 2
@@ -47,7 +47,7 @@ sensor:
       return data[item->offset + 1] == 0 ? x : -x;
 
   - platform: modbus_controller
-    name: '${friendly_name} Output Voltage'
+    name: 'Output Voltage'
     register_type: holding
     address: 10
     value_type: U_WORD
@@ -59,7 +59,7 @@ sensor:
       - multiply: 0.01
 
   - platform: modbus_controller
-    name: '${friendly_name} Output Current'
+    name: 'Output Current'
     register_type: holding
     address: 11
     value_type: U_WORD
@@ -71,7 +71,7 @@ sensor:
       - multiply: 0.01
 
   - platform: modbus_controller
-    name: '${friendly_name} Output Energy'
+    name: 'Output Energy'
     register_type: holding
     address: 12
     value_type: U_WORD
@@ -83,7 +83,7 @@ sensor:
       - multiply: 0.001
 
   - platform: modbus_controller
-    name: '${friendly_name} Output Power'
+    name: 'Output Power'
     address: 13
     register_type: holding
     value_type: U_WORD
@@ -95,7 +95,7 @@ sensor:
       - multiply: 0.01
 
   - platform: modbus_controller
-    name: '${friendly_name} Input Voltage'
+    name: 'Input Voltage'
     register_type: holding
     address: 14
     value_type: U_WORD
@@ -107,7 +107,7 @@ sensor:
       - multiply: 0.01
 
   - platform: modbus_controller
-    name: '${friendly_name} Energy'
+    name: 'Energy'
     internal: true
     register_type: holding
     address: 40
@@ -121,20 +121,20 @@ sensor:
 
 switch:
   - platform: modbus_controller
-    name: '${friendly_name} Keypad Lock'
+    name: 'Keypad Lock'
     address: 15
     register_type: holding
     bitmask: 1
 
   - platform: modbus_controller
-    name: '${friendly_name} Power'
+    name: 'Power'
     address: 18
     register_type: holding
     bitmask: 1
 
 number:
   - platform: modbus_controller
-    name: '${friendly_name} Voltage Setting'
+    name: 'Voltage Setting'
     address: 8
     value_type: U_WORD
     min_value: 0.01
@@ -143,7 +143,7 @@ number:
     multiply: 100
 
   - platform: modbus_controller
-    name: '${friendly_name} Current Setting'
+    name: 'Current Setting'
     address: 9
     value_type: U_WORD
     min_value: 0.01
@@ -152,7 +152,7 @@ number:
     multiply: 100
 
   - platform: modbus_controller
-    name: '${friendly_name} Voltage Protection'
+    name: 'Voltage Protection'
     entity_category: config
     address: 82
     value_type: U_WORD
@@ -162,7 +162,7 @@ number:
     multiply: 100
 
   - platform: modbus_controller
-    name: '${friendly_name} Current Protection'
+    name: 'Current Protection'
     entity_category: config
     address: 83
     value_type: U_WORD
@@ -173,7 +173,7 @@ number:
 
 binary_sensor:
   - platform: modbus_controller
-    name: '${friendly_name} Battery Mode'
+    name: 'Battery Mode'
     address: 32
     register_type: holding
     bitmask: 1

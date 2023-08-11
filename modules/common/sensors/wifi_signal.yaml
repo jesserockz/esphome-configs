@@ -1,5 +1,0 @@
----
-platform: wifi_signal
-name: "${friendly_name} WiFi Signal"
-update_interval: 60s
-id: wifi_signal_sensor

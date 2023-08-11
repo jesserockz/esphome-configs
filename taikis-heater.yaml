@@ -2,7 +2,6 @@
 substitutions:
   name: taikis-heater
   friendly_name: Taiki's Heater
-  ip: '10.6.6.'
   wifi_reboot_timeout: 0s
 
 packages:

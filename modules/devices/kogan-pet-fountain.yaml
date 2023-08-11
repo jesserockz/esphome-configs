@@ -1,0 +1,67 @@
+---
+substitutions:
+  board: esp8285
+
+packages:
+  common: !include ../common-8266.yaml
+
+logger:
+  baud_rate: 0
+
+uart:
+  tx_pin: TX
+  rx_pin: RX
+  baud_rate: 9600
+
+tuya:
+  time_id: sntp_time
+  status_pin: GPIO4
+
+sensor:
+  - platform: tuya
+    sensor_datapoint: 102
+    id: dp_102
+  - platform: tuya
+    sensor_datapoint: 104
+    id: dp_104
+    name: "Minutes Running"
+    unit_of_measurement: minutes
+    state_class: measurement
+  - platform: tuya
+    sensor_datapoint: 105
+    id: dp_105
+    name: "Minutes Flowing"
+    unit_of_measurement: minutes
+    state_class: measurement
+  - platform: tuya
+    sensor_datapoint: 108
+    id: dp_108
+
+switch:
+  - platform: tuya
+    switch_datapoint: 101
+    id: pump
+    name: None
+
+light:
+  - platform: binary
+    name: Status
+    output: tuya_light_out
+
+output:
+  - platform: template
+    id: tuya_light_out
+    type: binary
+    write_action:
+      then:
+        - number.set:
+            id: number_102
+            value: !lambda "return state ? 1 : 0;"
+
+number:
+  - platform: tuya
+    number_datapoint: 102
+    id: number_102
+    min_value: 0
+    max_value: 255
+    step: 1

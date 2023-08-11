@@ -9,4 +9,5 @@ substitutions:
   switch_relay_3: "false"
 
 packages:
+  common: !include modules/common-8266.yaml
   zemismart: !include modules/devices/zemismart/3gang.yaml

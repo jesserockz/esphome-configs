@@ -1,4 +1,4 @@
 ---
 platform: restart
-name: "${friendly_name} Restart"
+name: "Restart"
 id: restart_button

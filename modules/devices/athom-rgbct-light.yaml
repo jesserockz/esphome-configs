@@ -1,6 +1,6 @@
 ---
 substitutions:
-  restore_mode: RESTORE_DEFAULT_ON
+  restore_mode: ALWAYS_ON
   light_name: "${friendly_name}"
   board: esp8285
 
@@ -11,15 +11,19 @@ output:
   - platform: esp8266_pwm
     id: red_output
     pin: GPIO4
+    max_power: 80%
   - platform: esp8266_pwm
     id: green_output
     pin: GPIO12
+    max_power: 80%
   - platform: esp8266_pwm
     id: blue_output
     pin: GPIO14
+    max_power: 80%
   - platform: esp8266_pwm
     id: white_output
     pin: GPIO5
+    max_power: 80%
   - platform: esp8266_pwm
     id: ct_output
     inverted: true
@@ -28,7 +32,7 @@ output:
 light:
   - platform: rgbct
     restore_mode: ${restore_mode}
-    color_interlock: true
+    color_interlock: false
     name: "${light_name}"
     red: red_output
     green: green_output

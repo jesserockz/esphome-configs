@@ -74,7 +74,7 @@ rf_bridge:
 
 light:
   - platform: status_led
-    name: ${friendly_name} Status LED
+    name: Status LED
     disabled_by_default: true
     pin:
       number: GPIO13
@@ -82,7 +82,7 @@ light:
 
 switch:
   - platform: template
-    name: '${friendly_name} Advanced Sniffing'
+    name: 'Advanced Sniffing'
     optimistic: true
     turn_on_action:
       - rf_bridge.start_advanced_sniffing
@@ -91,6 +91,6 @@ switch:
 
 button:
   - platform: template
-    name: '${friendly_name} Learn'
+    name: 'Learn'
     on_press:
       - rf_bridge.learn

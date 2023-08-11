@@ -22,13 +22,14 @@ fan:
 
 number:
   - platform: tuya
-    name: "${friendly_name} Speed Mode"
+    id: speed_mode
+    name: "Speed Mode"
     number_datapoint: 3
     min_value: 0
     max_value: 3
     step: 1
   - platform: tuya
-    name: "${friendly_name} Timer"
+    name: "Timer"
     number_datapoint: 11
     min_value: 0
     max_value: 8
@@ -36,6 +37,6 @@ number:
 
 switch:
   - platform: tuya
-    name: "${friendly_name} Beep"
+    name: "Beep"
     entity_category: config
     switch_datapoint: 101

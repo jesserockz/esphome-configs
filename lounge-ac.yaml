@@ -7,4 +7,5 @@ substitutions:
   climate_name: Lounge
 
 packages:
+  common: !include modules/common-8266.yaml
   panasonic: !include modules/devices/panasonic-ac.yaml

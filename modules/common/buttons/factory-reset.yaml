@@ -1,0 +1,4 @@
+---
+platform: factory_reset
+name: "Factory Reset"
+id: factory_reset_button

@@ -10,4 +10,5 @@ substitutions:
   button_3_hold: 1s
 
 packages:
+  common: !include modules/common-8266.yaml
   zemismart: !include modules/devices/zemismart/3gang.yaml

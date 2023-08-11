@@ -12,7 +12,7 @@ binary_sensor:
     pin:
       inverted: true
       number: GPIO3
-    name: "${friendly_name} Button 1"
+    name: "Button 1"
     disabled_by_default: true
     on_multi_click:
       - timing:
@@ -29,7 +29,7 @@ binary_sensor:
     pin:
       inverted: true
       number: GPIO5
-    name: "${friendly_name} Button 2"
+    name: "Button 2"
     disabled_by_default: true
     on_click:
       max_length: 0.5s
@@ -57,7 +57,7 @@ output:
 
 light:
   - platform: status_led
-    name: "${friendly_name} Status LED"
+    name: "Status LED"
     disabled_by_default: true
     pin:
       number: GPIO0
@@ -65,7 +65,7 @@ light:
 
   # Relays
   - platform: binary
-    name: "${friendly_name} 1"
+    name: "1"
     id: light1
     output: relay1
     on_turn_on:
@@ -73,7 +73,7 @@ light:
     on_turn_off:
       - light.turn_off: light1_led
   - platform: binary
-    name: "${friendly_name} 2"
+    name: "2"
     id: light2
     output: relay2
     on_turn_on:
@@ -83,13 +83,13 @@ light:
 
   # Button LEDs
   - platform: monochromatic
-    name: "${friendly_name} LED1"
+    name: "LED1"
     disabled_by_default: true
     id: light1_led
     output: led1
     default_transition_length: 500ms
   - platform: monochromatic
-    name: "${friendly_name} LED2"
+    name: "LED2"
     disabled_by_default: true
     id: light2_led
     output: led2

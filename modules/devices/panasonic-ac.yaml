@@ -2,9 +2,6 @@
 substitutions:
   climate_name: ${friendly_name}
 
-packages:
-  common: !include ../common-8266.yaml
-
 external_components:
   source: github://DomiStyle/esphome-panasonic-ac
   components: [panasonic_ac]
@@ -23,12 +20,16 @@ climate:
     type: cnt
     name: ${climate_name}
     horizontal_swing_select:
-      name: ${friendly_name} Horizontal Swing Mode
+      name: Horizontal Swing Mode
     vertical_swing_select:
-      name: ${friendly_name} Vertical Swing Mode
+      name: Vertical Swing Mode
     outside_temperature:
-      name: ${friendly_name} Outside Temperature
+      name: Outside Temperature
     current_temperature_sensor: lounge_temp
+    visual:
+      temperature_step:
+        target_temperature: 0.5
+        current_temperature: 0.1
 
 sensor:
   - platform: homeassistant

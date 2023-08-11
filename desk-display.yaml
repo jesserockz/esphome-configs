@@ -1,0 +1,100 @@
+---
+substitutions:
+  name: desk-display
+  friendly_name: Desk Display
+  wifi_reboot_timeout: 15min
+
+packages:
+  common: !include modules/common-32-idf.yaml
+  wifi: !include modules/common/wifi.yaml
+
+light:
+  - platform: esp32_rmt_led_strip
+    chipset: WS2812
+    pin: GPIO13
+    num_leds: 256
+    rgb_order: GRB
+    rmt_channel: 3
+    max_refresh_rate: 10ms
+
+    name: 'Matrix'
+    id: matrix
+    color_correct: [50%, 50%, 50%]
+    default_transition_length: 0s
+    restore_mode: ALWAYS_ON
+    effects:
+    #   - addressable_lambda:
+    #       name: Rainbow Left
+    #       lambda: |-
+    #         ESPHSVColor hsv;
+    #         hsv.value = 255;
+    #         hsv.saturation = 240;
+    #         uint16_t hue = (millis() * 10) % 0xFFFF;
+    #         const uint16_t add = 0xFFFF / 32;
+    #         for (size_t i=0; i < it.size(); i += 8) {
+    #           hsv.hue = hue >> 8;
+    #           it.range(i, i+8) = hsv;
+    #           hue += add;
+    #         }
+    #   - addressable_lambda:
+    #       name: Rainbow Right
+    #       lambda: |-
+    #         ESPHSVColor hsv;
+    #         hsv.value = 255;
+    #         hsv.saturation = 240;
+    #         uint16_t hue = (millis() * 10) % 0xFFFF;
+    #         const uint16_t add = 0xFFFF / 32;
+    #         for (size_t i=it.size() - 8; i < it.size(); i += 8) {
+    #           hsv.hue = hue >> 8;
+    #           it.range(i, i+8) = hsv;
+    #           hue += add;
+    #         }
+
+
+display:
+  - platform: addressable_light
+    id: display_entity
+    addressable_light_id: matrix
+    width: 32
+    height: 8
+    update_interval: 16ms
+
+    pixel_mapper: |-
+      if (x % 2 == 0) {
+        return (x * 8) + y;
+      }
+      return (x * 8) + (7 - y);
+
+    pages:
+      - id: clock_page
+        lambda: |-
+
+          auto light_color = id(matrix).current_values;
+          Color color(light_color.get_red() * 255, light_color.get_green() * 255, light_color.get_blue() * 255);
+
+          it.strftime(15, 0, id(font_8bithud),  color, TextAlign::RIGHT, "%H", id(sntp_time).now());
+          it.print(15, 0, id(font_8bithud), color, ((millis()/1000)%2==0)?":":" ");
+          it.strftime(18, 0, id(font_8bithud),  color, TextAlign::LEFT, "%M", id(sntp_time).now());
+
+
+      # - id: notification
+      #   lambda: |-
+      #     return
+
+font:
+  - id: font_8bithud
+    file: 'fonts/8-bit-hud2.ttf'
+    size: 5
+    glyphs: '!"%()+,-_.:*=°?~#0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz'
+
+switch:
+  - platform: template
+    name: "Display On"
+    id: display_on
+    restore_mode: ALWAYS_ON
+    setup_priority: 100
+    lambda: return id(display_entity).get_enabled();
+    turn_on_action:
+      - lambda: id(display_entity).set_enabled(true);
+    turn_off_action:
+      - lambda: id(display_entity).set_enabled(false);

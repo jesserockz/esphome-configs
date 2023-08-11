@@ -1,0 +1,43 @@
+substitutions:
+  name: olimex-bt-proxy-garage
+  friendly_name: Olimex BT Proxy Garage
+  board: esp32-poe-iso
+
+packages:
+  common: !include modules/common-32-idf.yaml
+
+logger:
+  # level: INFO
+  level: DEBUG
+  # level: VERY_VERBOSE
+
+ethernet:
+  type: LAN8720
+  mdc_pin: GPIO23
+  mdio_pin: GPIO18
+  clk_mode: GPIO17_OUT
+  phy_addr: 0
+  power_pin: GPIO12
+
+esp32_ble_tracker:
+  scan_parameters:
+    active: true
+    interval: 1100ms
+    window: 1100ms
+
+bluetooth_proxy:
+  id: my_bluetooth_proxy
+  active: true
+
+esp32_ble_server:
+  model: PoE-ISO
+  manufacturer: Olimex
+
+psram:
+
+time:
+  - id: !extend sntp_time
+    on_time:
+      - cron: 0 0 0 * * *
+        then:
+          - button.press: restart_button

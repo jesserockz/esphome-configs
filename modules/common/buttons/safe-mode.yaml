@@ -1,0 +1,4 @@
+---
+platform: safe_mode
+name: "Safe Mode"
+id: safe_mode_button

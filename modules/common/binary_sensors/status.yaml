@@ -1,4 +1,4 @@
 ---
 platform: status
-name: "${friendly_name} Node Status"
+name: "Node Status"
 id: system_status

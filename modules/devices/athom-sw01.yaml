@@ -12,7 +12,7 @@ binary_sensor:
     pin:
       inverted: true
       number: GPIO3
-    name: "${friendly_name} Button"
+    name: "Button"
     disabled_by_default: true
     on_multi_click:
       - timing:
@@ -55,7 +55,7 @@ output:
 
 light:
   - platform: status_led
-    name: "${friendly_name} Status LED"
+    name: "Status LED"
     disabled_by_default: true
     pin:
       number: GPIO0
@@ -73,7 +73,7 @@ light:
 
   # Button LED
   - platform: monochromatic
-    name: "${friendly_name} LED"
+    name: "LED"
     disabled_by_default: true
     id: led1
     output: button_led1

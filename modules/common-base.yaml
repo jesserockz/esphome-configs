@@ -1,9 +1,9 @@
 ---
 esphome:
   name: ${name}
+  friendly_name: ${friendly_name}
 
 packages:
-  wifi: !include common/wifi.yaml
   ota: !include common/ota.yaml
   sensors: !include common/sensors.yaml
   binary_sensors: !include common/binary_sensors.yaml

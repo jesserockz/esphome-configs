@@ -29,7 +29,7 @@ binary_sensor:
     pin:
       number: 0
       inverted: true
-    name: "${friendly_name} Power Button"
+    name: "Power Button"
     disabled_by_default: true
     on_multi_click:
       - timing:
@@ -84,40 +84,40 @@ sensor:
     initial_mode: voltage
     change_mode_every: 4
     voltage:
-      name: "${friendly_name} Voltage"
+      name: "Voltage"
     current:
-      name: "${friendly_name} Current"
+      name: "Current"
     power:
-      name: "${friendly_name} Power"
+      name: "Power"
     energy:
-      name: "${friendly_name} Energy"
+      name: "Energy"
 
 switch:
   - platform: gpio
-    name: "${friendly_name} 1"
+    name: "1"
     pin: GPIO13
     restore_mode: ${relay_1_restore_mode}
     id: relay_1
   - platform: gpio
-    name: "${friendly_name} 2"
+    name: "2"
     pin: GPIO14
     restore_mode: ${relay_2_restore_mode}
     id: relay_2
   - platform: gpio
-    name: "${friendly_name} 3"
+    name: "3"
     pin: GPIO3
     restore_mode: ${relay_3_restore_mode}
     id: relay_3
 
   - platform: gpio
-    name: "${friendly_name} USB"
+    name: "USB"
     pin: GPIO15
     restore_mode: ${relay_usb_restore_mode}
     id: relay_usb
 
 light:
   - platform: status_led
-    name: "${friendly_name} Status LED"
+    name: "Status LED"
     pin:
       number: GPIO1
       inverted: true

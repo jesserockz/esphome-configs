@@ -13,7 +13,7 @@ binary_sensor:
         input: true
         pullup: true
       inverted: true
-    name: '${friendly_name} Power Button'
+    name: 'Power Button'
     on_multi_click:
       - timing:
           - ON for at most 1s
@@ -34,7 +34,7 @@ sensor:
     cf1_pin: GPIO5
     voltage_divider: 780
     current:
-      name: '${friendly_name} Current'
+      name: 'Current'
       filters:
         - calibrate_linear:
             - 0.0000 -> 0.0110  # Relay off no load
@@ -48,10 +48,10 @@ sensor:
         # Normalize for plug load
         - lambda: if (x < 0.0260) return 0; else return (x - 0.0260);
     voltage:
-      name: '${friendly_name} Voltage'
+      name: 'Voltage'
 
     power:
-      name: '${friendly_name} Power'
+      name: 'Power'
       id: socket_my_power
       unit_of_measurement: W
       filters:
@@ -70,7 +70,7 @@ sensor:
     update_interval: 1s
 
   - platform: total_daily_energy
-    name: '${friendly_name} Total Daily Energy'
+    name: 'Total Daily Energy'
     power_id: socket_my_power
     unit_of_measurement: kWh
     filters:
@@ -85,7 +85,7 @@ switch:
 
 light:
   - platform: status_led
-    name: "${friendly_name} Status LED"
+    name: "Status LED"
     pin:
       number: GPIO13
       inverted: true

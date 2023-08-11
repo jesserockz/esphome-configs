@@ -25,10 +25,10 @@ climate:
 
 switch:
   - platform: tuya
-    name: '${friendly_name} Lock'
+    name: 'Lock'
     switch_datapoint: 2
     icon: mdi:lock
   - platform: tuya
-    name: '${friendly_name} Eco Mode'
+    name: 'Eco Mode'
     switch_datapoint: 7
     icon: mdi:leaf

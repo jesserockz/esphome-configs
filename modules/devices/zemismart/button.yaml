@@ -3,7 +3,7 @@ platform: gpio
 pin:
   inverted: true
   number: ${gpio_pin}
-name: '${friendly_name} Button ${number}'
+name: 'Button ${number}'
 disabled_by_default: true
 on_multi_click:
   - timing:

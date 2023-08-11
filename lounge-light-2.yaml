@@ -9,3 +9,6 @@ substitutions:
 
 packages:
   light: !include modules/devices/athom-rgbct-light.yaml
+
+esp8266:
+  restore_from_flash: false

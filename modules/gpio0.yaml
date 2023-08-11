@@ -5,4 +5,4 @@ binary_sensor:
       number: GPIO0
       inverted: true
     id: io0_button
-    name: '${friendly_name} button'
+    name: 'Button'

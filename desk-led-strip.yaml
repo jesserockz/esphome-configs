@@ -12,7 +12,7 @@ binary_sensor:
       number: GPIO0
       mode: INPUT_PULLUP
       inverted: true
-    name: "${friendly_name} Button"
+    name: "Button"
     disabled_by_default: true
     on_multi_click:
       - timing:
@@ -40,14 +40,14 @@ output:
 
 light:
   - platform: monochromatic
-    name: "${friendly_name} 1"
+    name: "1"
     id: light1
     output: red_output
   - platform: monochromatic
-    name: "${friendly_name} 2"
+    name: "2"
     id: light2
     output: green_output
   - platform: monochromatic
-    name: "${friendly_name} 3"
+    name: "3"
     id: light3
     output: blue_output

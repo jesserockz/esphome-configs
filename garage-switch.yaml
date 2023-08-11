@@ -10,7 +10,9 @@ substitutions:
   relay_1_type: light
   light_1_name: 'Laundry'
   button_3_hold: 1s
+  api_timeout: 0s
 
 packages:
+  common: !include modules/common-8266.yaml
   zemismart: !include modules/devices/zemismart/3gang.yaml
   light-1: !include modules/devices/zemismart/light-1.yaml

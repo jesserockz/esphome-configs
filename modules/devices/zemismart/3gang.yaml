@@ -1,7 +1,4 @@
 ---
-packages:
-  common: !include ../../common-8266.yaml
-
 binary_sensor:
   - <<: !include
       file: button.yaml
@@ -34,19 +31,19 @@ switch:
   - platform: output
     id: switch1
     output: relay1
-    name: '${friendly_name} Relay 1'
+    name: 'Relay 1'
   - platform: output
     id: switch2
     output: relay2
-    name: '${friendly_name} Relay 2'
+    name: 'Relay 2'
   - platform: output
     id: switch3
     output: relay3
-    name: '${friendly_name} Relay 3'
+    name: 'Relay 3'
 
 light:
   - platform: status_led
-    name: ${friendly_name} Status LED
+    name: Status LED
     disabled_by_default: true
     pin:
       number: GPIO2

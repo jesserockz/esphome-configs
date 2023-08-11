@@ -8,5 +8,5 @@ esp32:
     type: arduino
 
 packages:
-  captive_portal: !include common/captive_portal.yaml
   base: !include common-base.yaml
+  captive_portal: !include common/captive_portal.yaml

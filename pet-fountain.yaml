@@ -1,0 +1,53 @@
+---
+substitutions:
+  name: pet-fountain
+  friendly_name: Pet Fountain
+  wifi_ap: lounge
+
+packages:
+  common: !include modules/devices/kogan-pet-fountain.yaml
+
+number:
+  - platform: template
+    restore_value: true
+    name: "Run Time"
+    id: run_time
+    optimistic: true
+    min_value: 1
+    max_value: 60
+    step: 1
+    unit_of_measurement: minutes
+  - platform: template
+    restore_value: true
+    name: "Off Time"
+    id: off_time
+    optimistic: true
+    min_value: 1
+    max_value: 60
+    step: 1
+    unit_of_measurement: minutes
+
+switch:
+  - platform: template
+    name: "Timer"
+    id: timer_switch
+    lambda: return id(run_timer).is_running();
+    restore_mode: RESTORE_DEFAULT_ON
+    turn_on_action:
+      - script.execute: run_timer
+    turn_off_action:
+      then:
+        - script.stop: run_timer
+
+script:
+  - id: run_timer
+    mode: single
+    then:
+      - switch.turn_on: pump
+      - delay: !lambda 'return id(run_time).state * 60 * 1000;'
+      - switch.turn_off: pump
+      - delay: !lambda 'return id(off_time).state * 60 * 1000;'
+      - script.execute: run_timer
+
+web_server:
+  include_internal: true

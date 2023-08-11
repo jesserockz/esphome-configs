@@ -12,12 +12,12 @@ switch:
   - platform: gpio
     id: relay
     pin: GPIO13
-    name: "${friendly_name} Relay"
+    name: "Relay"
     restore_mode: RESTORE_DEFAULT_ON
 
 light:
   - platform: status_led
-    name: "${friendly_name} Blue LED"
+    name: "Blue LED"
     disabled_by_default: true
     pin:
       number: GPIO4
@@ -25,7 +25,7 @@ light:
 
 binary_sensor:
   - platform: gpio
-    name: "${friendly_name} Button"
+    name: "Button"
     disabled_by_default: true
     pin:
       number: GPIO3

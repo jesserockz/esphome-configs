@@ -5,9 +5,7 @@ substitutions:
 esp32:
   board: ${board}
   framework:
-    type: esp-idf
+    type: arduino
 
 packages:
   base: !include common-base.yaml
-
-esp32_ble_tracker:
