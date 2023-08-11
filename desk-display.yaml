@@ -80,14 +80,15 @@ display:
                       id(sntp_time).now());
         # yamllint enable rule:line-length
 
-      # - id: notification
-      #   lambda: |-
-      #     return
+        # - id: notification
+        #   lambda: |-
+        #     return
 
 font:
   - id: font_8bithud
     file: 'fonts/8-bit-hud2.ttf'
     size: 5
+    # yamllint disable-line rule:line-length
     glyphs: '!"%()+,-_.:*=°?~#0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz'
 
 switch:
