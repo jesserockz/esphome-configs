@@ -3,13 +3,14 @@ substitutions:
   name: garage-door
   friendly_name: Garage Door
   ip: '10.6.6.68'
+  wifi_ap: garage
 
 packages:
   common: !include modules/common-8266.yaml
 
 binary_sensor:
   - platform: gpio
-    name: "${friendly_name} Contact"
+    name: Contact
     disabled_by_default: true
     device_class: garage_door
     id: contact
@@ -18,7 +19,7 @@ binary_sensor:
       inverted: true
 
   - platform: gpio
-    name: "${friendly_name} Button"
+    name: Button
     disabled_by_default: true
     pin:
       number: GPIO14
@@ -36,7 +37,7 @@ binary_sensor:
 
 light:
   - platform: status_led
-    name: "${friendly_name} Status LED"
+    name: Status LED
     id: wifi_led
     disabled_by_default: true
     pin: GPIO12
@@ -50,7 +51,7 @@ switch:
   - platform: output
     output: relay_output
     id: relay
-    name: "${friendly_name} Relay"
+    name: Relay
     disabled_by_default: true
     on_turn_on:
       - light.turn_on: wifi_led
@@ -60,12 +61,24 @@ switch:
 
 cover:
   - platform: template
-    name: "${friendly_name}"
+    name: None
     device_class: garage
     lambda: "return id(contact).state ? COVER_OPEN : COVER_CLOSED;"
     open_action:
-      - switch.turn_on: relay
+      - if:
+          condition:
+            lambda: return !id(contact).state;
+          then:
+            - switch.turn_on: relay
     stop_action:
-      - switch.turn_on: relay
+      - if:
+          condition:
+            lambda: return id(contact).state;
+          then:
+            - switch.turn_on: relay
     close_action:
-      - switch.turn_on: relay
+      - if:
+          condition:
+            lambda: return id(contact).state;
+          then:
+            - switch.turn_on: relay
