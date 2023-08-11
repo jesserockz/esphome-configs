@@ -4,57 +4,25 @@ substitutions:
   friendly_name: Alarm
   wifi_reboot_timeout: 0s
 
-  alarm_code: !secret alarm_master_code
+  alarm_master_code: !secret alarm_master_code
 
-  disarmed_state: '0'
-  arming_state: '1'
-  armed_away_state: '2'
-  armed_home_state: '3'
-  armed_night_state: '4'
-  pending_state: '5'
-  triggered_state: '6'
-
-  # yamllint disable-line rule:line-length
-  state_strings: '{"disarmed", "arming", "armed_away", "armed_home", "armed_night", "pending", "triggered"}'
-
-  pir_1: 'Master'
-  pir_1_pin: '33'
-  pir_2: 'Garage'
-  pir_2_pin: '32'
-  pir_3: 'Lounge'
-  pir_3_pin: '34'
-  tamper_pin: '35'
-
-  # pir_4: ''
-  # pir_4_pin: ''
-  # pir_5: ''
-  # pir_5_pin: '39'
-  # pir_6: ''
-  # pir_6_pin: '36'
-
-  adc_read_time: 0.1s
-
-  # Raw voltage min and max
-  pir_short_max: !secret alarm_pir_short_max
-
-  pir_normal_min: !secret alarm_pir_normal_min
-  pir_normal_max: !secret alarm_pir_normal_max
-
-  pir_motion_min: !secret alarm_pir_motion_min
-  pir_motion_max: !secret alarm_pir_motion_max
-
-  pir_tamper_min: !secret alarm_pir_tamper_min
-
-  tamper_ok_value: !secret alarm_tamper_ok_value
-
-  relay_1_pin: 'GPIO27'
-  relay_2_pin: 'GPIO26'
-  relay_3_pin: 'GPIO25'
-  relay_4_pin: 'GPIO23'
-  relay_5_pin: 'GPIO22'
-  relay_6_pin: 'GPIO21'
-  relay_7_pin: 'GPIO19'
-  relay_8_pin: 'GPIO18'
+  zone1: GPIO4
+  zone2: GPIO2
+  zone3: GPIO15
+  zone4: GPIO13
+  zone5: GPIO18
+  zone6: GPIO14
+  zone7: GPIO33
+  zone8: GPIO32
+  zone9: GPIO36
+  zone10: GPIO39
+  zone11: GPIO34
+  zone12: GPIO35
+  alarm1: GPIO12
+  alarm2: GPIO5
+  out1: GPIO23
+  out2: GPIO5
+  status_led: GPIO3
 
 ######### Exposed to HA ##########
 
@@ -67,12 +35,6 @@ substitutions:
 #   - pending
 #   - triggered
 
-# text_sensor.alarm_xxx_pir
-#   - Normal
-#   - Short
-#   - Motion
-#   - Tamper
-
 # service.esphome_${name}_arm
 # service.esphome_${name}_arm_away
 
@@ -84,10 +46,34 @@ substitutions:
 
 packages:
   common: !include modules/common-32-idf.yaml
-  master: !include modules/alarm/pir-1.yaml
-  garage: !include modules/alarm/pir-2.yaml
-  lounge: !include modules/alarm/pir-3.yaml
-  tamper: !include modules/alarm/tamper.yaml
+  wifi: !include modules/common/wifi.yaml
+
+  master: !include
+    file: modules/alarm/zone.yaml
+    vars:
+      name: Master PIR Motion
+      zone: 1
+      device_class: motion
+  garage: !include
+    file: modules/alarm/zone.yaml
+    vars:
+      name: Garage PIR Motion
+      zone: 2
+      device_class: motion
+  lounge: !include
+    file: modules/alarm/zone.yaml
+    vars:
+      name: Lounge PIR Motion
+      zone: 3
+      device_class: motion
+
+  smoke: !include
+    file: modules/alarm/zone.yaml
+    vars:
+      name: Smoke
+      zone: 4
+      inverted: 'true'
+      device_class: smoke
 
 external_components:
   source: github://muxa/esphome-state-machine
@@ -113,14 +99,89 @@ api:
       then:
         - if:
             condition:
-              lambda: return code == "${alarm_code}";
+              lambda: |-
+                for (int i = 0; i < id(code_count); i++) {
+                  if (strcmp(id(codes)[i], code.c_str()) == 0) {
+                    id(last_used_code_index) = i;
+                    return true;
+                  }
+                }
+                return false;
             then:
               - state_machine.transition: disarm
+              - homeassistant.event:
+                  event: esphome.alarm_disarmed
+                  data:
+                    alarm: ${name}
+                    code: !lambda 'return id(codes)[id(last_used_code_index)].name;'
             else:
               - state_machine.transition: failed_code
+              - homeassistant.event:
+                  event: esphome.alarm_failed_code
+                  data:
+                    alarm: ${name}
+                    code: !lambda 'return code;'
+        - globals.set:
+            id: last_used_code_index
+            value: '-1'
+
+    - service: add_code
+      variables:
+        master_code: string
+        new_code: string
+        name: string
+      then:
+        - lambda: |-
+            if (master_code != "${alarm_master_code}") {
+              ESP_LOGD("alarm", "Invalid master code");
+              return;
+            }
+            for (uint8_t i = 0; i < id(code_count); i++) {
+              if (strcmp(id(codes)[i], new_code.c_str()) == 0) {
+                ESP_LOGD("alarm", "Code already exists");
+                return;
+              }
+            }
+            if (id(code_count) >= 10) {
+              ESP_LOGD("alarm", "Max codes reached");
+              return;
+            }
+            memcpy(id(codes)[id(code_count)], new_code.c_str(), new_code.length());
+            memcpy(id(code_names)[id(code_count)], name.c_str(), name.length());
+
+            id(code_count)++;
+            ESP_LOGD("alarm", "Added code for %s", name);
+
+    - service: remove_code
+      variables:
+        master_code: string
+        name: string
+      then:
+        - lambda: |-
+            if (master_code != "${alarm_master_code}") {
+              ESP_LOGD("alarm", "Invalid master code");
+              return;
+            }
+            for (uint8_t i = 0; i < id(code_count); i++) {
+              if (strcmp(id(code_names)[i], name.c_str()) == 0) {
+                id(codes)[i] = "";
+                id(code_names)[i] = "";
+                id(code_count)--;
+                if (i != id(code_count)) {
+                  id(codes)[i] = id(codes)[id(code_count)];
+                  id(code_names)[i] = id(code_names)[id(code_count)];
+                  id(codes)[id(code_count)] = "";
+                  id(code_names)[id(code_count)] = "";
+                }
+                ESP_LOGD("alarm", "Removed code for %s", name);
+                return;
+              }
+            }
+            ESP_LOGD("alarm", "Code not found");
+
 
 script:
-  - id: check_motion
+  - id: evaluate_alarm
     then:
       - if:
           condition:
@@ -130,130 +191,78 @@ script:
                   - state_machine.state: armed_home
                   - state_machine.state: armed_night
               - or:
-                  - lambda: return id(pir_1_value).state > 0;
-                  - lambda: return id(pir_2_value).state > 0;
-                  - lambda: return id(pir_3_value).state > 0;
+                  - lambda: return id(zone1).state;
+                  - lambda: return id(zone2).state;
+                  - lambda: return id(zone3).state;
+                  - lambda: return id(zone4).state;
           then:
-            - state_machine.transition: motion
+            - state_machine.transition: trip
 
 globals:
-  - id: alarm_state_global
-    type: 'uint8_t'
-    restore_value: true
-    initial_value: '0'
   - id: incorrect_codes
     type: 'uint8_t'
     restore_value: true
     initial_value: '0'
+  - id: codes
+    type: 'char[10][10]'
+    restore_value: true
+    initial_value: '{"${alarm_master_code}","","","","","","","","",""}'
+  - id: code_names
+    type: 'char[10][10]'
+    restore_value: true
+    initial_value: '{"Master","","","","","","","","",""}'
+  - id: code_count
+    type: 'uint8_t'
+    restore_value: true
+    initial_value: '1'
+  - id: last_used_code_index
+    type: 'int8_t'
+    restore_value: false
+    initial_value: '-1'
 
 switch:
   - platform: template
-    name: ${friendly_name} Config Mode
+    name: Config Mode
     icon: mdi:shield-edit
     optimistic: true
     entity_category: config
 
   - platform: template
-    name: ${friendly_name} Trigger Indoor Siren
-    id: trigger_indoor_siren
+    name: Trigger Sirens
+    id: trigger_sirens
     icon: mdi:bullhorn
     optimistic: true
     entity_category: config
-    restore_state: true
+    restore_mode: RESTORE_DEFAULT_OFF
 
-  - platform: template
-    name: ${friendly_name} Trigger Outdoor Siren
-    id: trigger_outdoor_siren
-    icon: mdi:bullhorn
-    optimistic: true
-    entity_category: config
-    restore_state: true
-
-  - platform: gpio
-    pin:
-      inverted: true
-      number: ${relay_1_pin}
-    restore_mode: ALWAYS_OFF
-    id: indoor_siren
-    name: ${friendly_name} Indoor Siren
+  - id: sirens
+    name: Sirens
+    pin: $alarm1
+    platform: gpio
     icon: mdi:bullhorn
 
-  - platform: gpio
-    pin:
-      inverted: true
-      number: ${relay_2_pin}
-    restore_mode: ALWAYS_OFF
-    id: outdoor_siren
-    name: ${friendly_name} Outdoor Siren
+  - id: alarm2
+    name: Alarm 2
+    pin: $alarm2
+    platform: gpio
     icon: mdi:bullhorn
-
-    # - platform: gpio
-    #   pin:
-    #     inverted: true
-    #     number: ${relay_3_pin}
-    #   restore_mode: ALWAYS_OFF
-    #   name: ${friendly_name} Relay 3
-    # - platform: gpio
-    #   pin:
-    #     inverted: true
-    #     number: ${relay_4_pin}
-    #   restore_mode: ALWAYS_OFF
-    #   name: ${friendly_name} Relay 4
-    # - platform: gpio
-    #   pin:
-    #     inverted: true
-    #     number: ${relay_5_pin}
-    #   restore_mode: ALWAYS_OFF
-    #   name: ${friendly_name} Relay 5
-    # - platform: gpio
-    #   pin:
-    #     inverted: true
-    #     number: ${relay_6_pin}
-    #   restore_mode: ALWAYS_OFF
-    #   name: ${friendly_name} Relay 6
-    # - platform: gpio
-    #   pin:
-    #     inverted: true
-    #     number: ${relay_7_pin}
-    #   restore_mode: ALWAYS_OFF
-    #   name: ${friendly_name} Relay 7
-    # - platform: gpio
-    #   pin:
-    #     inverted: true
-    #     number: ${relay_8_pin}
-    #   restore_mode: ALWAYS_OFF
-    #   name: ${friendly_name} Relay 8
 
 sensor:
   - platform: template
-    id: alarm_state
-    update_interval: 1s
-    lambda: return id(alarm_state_global);
-    filters:
-      - delta: 1
-    on_value:
-      - text_sensor.template.publish:
-          id: alarm_state_text
-          state: !lambda |-
-            static std::array<std::string, 7> strings = ${state_strings};
-            int y = (int) x;
-            return strings[y];
-
-  - platform: template
     id: incorrect_codes_sensor
-    name: '${friendly_name} Incorrect Codes'
+    name: 'Incorrect Codes'
     lambda: return id(incorrect_codes);
     update_interval: never
 
 text_sensor:
   - platform: state_machine
     id: alarm_state_text
-    name: ${friendly_name} State
+    name: State
 
 number:
   - platform: template
     id: arming_timeout
-    name: ${friendly_name} Arming Timeout
+    name: Arming Timeout
     restore_value: true
     initial_value: 60
     unit_of_measurement: seconds
@@ -266,7 +275,7 @@ number:
 
   - platform: template
     id: pending_timeout
-    name: ${friendly_name} Pending Timeout
+    name: Pending Timeout
     restore_value: true
     initial_value: 60
     unit_of_measurement: seconds
@@ -279,7 +288,7 @@ number:
 
   - platform: template
     id: trigger_timeout
-    name: ${friendly_name} Trigger Timeout
+    name: Trigger Timeout
     restore_value: true
     initial_value: 5
     unit_of_measurement: minutes
@@ -329,14 +338,9 @@ state_machine:
       on_enter:
         - if:
             condition:
-              switch.is_on: trigger_indoor_siren
+              switch.is_on: trigger_sirens
             then:
-              - switch.turn_on: indoor_siren
-        - if:
-            condition:
-              switch.is_on: trigger_outdoor_siren
-            then:
-              - switch.turn_on: outdoor_siren
+              - switch.turn_on: sirens
         - homeassistant.event:
             event: esphome.alarm_buzzer_start
             data:
@@ -346,8 +350,7 @@ state_machine:
         - delay: !lambda return id(trigger_timeout).state * 60 * 1000;
         - state_machine.transition: arm_away
       on_leave:
-        - switch.turn_off: indoor_siren
-        - switch.turn_off: outdoor_siren
+        - switch.turn_off: sirens
         - homeassistant.event:
             event: esphome.alarm_buzzer_stop
 
@@ -375,7 +378,7 @@ state_machine:
         - pending -> disarmed
         - triggered -> disarmed
 
-    - name: motion
+    - name: trip
       transitions:
         - armed_away -> pending
         - armed_home -> pending
@@ -391,6 +394,7 @@ state_machine:
     - name: failed_code
       on_input:
         - lambda: id(incorrect_codes) += 1;
+        - component.update: incorrect_codes_sensor
         - if:
             condition:
               lambda: return id(incorrect_codes) >= 3;
