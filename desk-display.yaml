@@ -50,7 +50,6 @@ light:
     #           hue += add;
     #         }
 
-
 display:
   - platform: addressable_light
     id: display_entity
@@ -67,15 +66,19 @@ display:
 
     pages:
       - id: clock_page
+        # yamllint disable rule:line-length
         lambda: |-
 
           auto light_color = id(matrix).current_values;
-          Color color(light_color.get_red() * 255, light_color.get_green() * 255, light_color.get_blue() * 255);
+          Color color(light_color.get_red() * 255, light_color.get_green() * 255,
+                      light_color.get_blue() * 255);
 
-          it.strftime(15, 0, id(font_8bithud),  color, TextAlign::RIGHT, "%H", id(sntp_time).now());
+          it.strftime(15, 0, id(font_8bithud),  color, TextAlign::RIGHT, "%H",
+                      id(sntp_time).now());
           it.print(15, 0, id(font_8bithud), color, ((millis()/1000)%2==0)?":":" ");
-          it.strftime(18, 0, id(font_8bithud),  color, TextAlign::LEFT, "%M", id(sntp_time).now());
-
+          it.strftime(18, 0, id(font_8bithud),  color, TextAlign::LEFT, "%M",
+                      id(sntp_time).now());
+        # yamllint enable rule:line-length
 
       # - id: notification
       #   lambda: |-

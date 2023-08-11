@@ -5,7 +5,9 @@ substitutions:
 packages:
   common: !include ../common-8266.yaml
 
-# Dont actually use deep sleep, but this should stop unavailable when the kettle is removed from the base
+# Dont actually use deep sleep,
+# but this should stop unavailable when the
+# kettle is removed from the base
 # or turned off at the wall
 deep_sleep:
 
@@ -22,13 +24,13 @@ tuya:
 switch:
   - platform: tuya
     switch_datapoint: 1
-    name: ${friendly_name}
+    name: None
     icon: mdi:kettle
 
 sensor:
   - platform: tuya
     sensor_datapoint: 5
-    name: ${friendly_name} Current Temperature
+    name: Current Temperature
     unit_of_measurement: °C
     device_class: temperature
     state_class: measurement
@@ -43,4 +45,4 @@ select:
       3: 80°C
       4: 90°C
       5: "Off"
-    name: ${friendly_name} Keep Warm
+    name: Keep Warm
