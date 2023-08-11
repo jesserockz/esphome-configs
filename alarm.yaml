@@ -179,7 +179,6 @@ api:
             }
             ESP_LOGD("alarm", "Code not found");
 
-
 script:
   - id: evaluate_alarm
     then:
