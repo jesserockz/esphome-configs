@@ -7,13 +7,14 @@ substitutions:
 
 packages:
   common: !include modules/common-32-idf.yaml
+  wifi: !include modules/common/wifi.yaml
 
   gpio0: !include modules/gpio0.yaml
 
 light:
   - platform: status_led
     pin: GPIO2
-    name: '${friendly_name} Status LED'
+    name: 'Status LED'
 
 sensor:
   - platform: adc
@@ -30,6 +31,11 @@ sensor:
     sample_duration: 200ms
     update_interval: 1000ms
     filters:
+      - lambda: "return x < 20.0f ? 0.0f : x;"
       - calibrate_linear:
-          - 116 -> 3.0
-          - 450 -> 11.27
+          - 0 -> 0
+          - 9 ->  0.03
+          - 365 -> 9.41
+    #       # - 116 -> 3.0
+    #       # - 450 -> 11.27
+      - lambda: "return clamp(x, 0.0f, 100.0f);"
