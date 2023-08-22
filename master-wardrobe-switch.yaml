@@ -1,0 +1,11 @@
+---
+substitutions:
+  name: master-wardrobe-switch
+  friendly_name: Master Wardrobe Switch
+  light_name: Master Wardrobe
+
+packages:
+  switch: !include modules/devices/athom-sw01.yaml
+
+logger:
+  baud_rate: 0
