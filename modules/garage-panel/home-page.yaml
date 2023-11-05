@@ -46,6 +46,6 @@ interval:
   - interval: 1s
     then:
       - lambda:
-          auto time = id(homeassistant_time).now();
+          auto time = id(sntp_time).now();
           std::string time_str = time.strftime("%H:%M:%S");
           id(home_clock).set_state(time_str, false, true);

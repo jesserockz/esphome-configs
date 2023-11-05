@@ -1,6 +1,6 @@
 ---
 substitutions:
-  keypad_page: '1'
+  keypad_page: "1"
 
 binary_sensor:
   - platform: nextion
@@ -107,7 +107,7 @@ binary_sensor:
                 service: alarm_control_panel.alarm_disarm
                 data:
                   entity_id: ${alarm_entity_id}
-                  code: !lambda 'return id(entered_code);'
+                  code: !lambda "return id(entered_code);"
             - lambda: id(entered_code) = "";
             - script.execute: update_feedback
           else:
@@ -120,9 +120,9 @@ text_sensor:
 
 globals:
   - id: entered_code
-    type: 'std::string'
+    type: "std::string"
     restore_value: false
-    initial_value: ''
+    initial_value: ""
 
 script:
   - id: update_feedback
