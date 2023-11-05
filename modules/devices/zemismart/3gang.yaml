@@ -31,15 +31,15 @@ switch:
   - platform: output
     id: switch1
     output: relay1
-    name: "Relay 1"
+    name: Relay 1
   - platform: output
     id: switch2
     output: relay2
-    name: "Relay 2"
+    name: Relay 2
   - platform: output
     id: switch3
     output: relay3
-    name: "Relay 3"
+    name: Relay 3
 
 light:
   - platform: status_led

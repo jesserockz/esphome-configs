@@ -44,9 +44,9 @@ script:
     mode: single
     then:
       - switch.turn_on: pump
-      - delay: !lambda 'return id(run_time).state * 60 * 1000;'
+      - delay: !lambda "return id(run_time).state * 60 * 1000;"
       - switch.turn_off: pump
-      - delay: !lambda 'return id(off_time).state * 60 * 1000;'
+      - delay: !lambda "return id(off_time).state * 60 * 1000;"
       - script.execute: run_timer
 
 web_server:
