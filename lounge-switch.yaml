@@ -2,11 +2,8 @@
 substitutions:
   name: lounge-switch
   friendly_name: Lounge Switch
-  ip: '10.6.6.155'
+  ip: "10.6.6.155"
   wifi_reboot_timeout: 0s
-  switch_relay_1: "false"
-  switch_relay_2: "false"
-  switch_relay_3: "false"
 
 packages:
   common: !include modules/common-8266.yaml

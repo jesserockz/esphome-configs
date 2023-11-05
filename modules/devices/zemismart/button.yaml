@@ -3,7 +3,7 @@ platform: gpio
 pin:
   inverted: true
   number: ${gpio_pin}
-name: 'Button ${number}'
+name: "Button ${number}"
 disabled_by_default: true
 on_multi_click:
   - timing:
@@ -13,18 +13,17 @@ on_multi_click:
       - if:
           condition:
             or:
-              - lambda: 'return ${switch_relay_${number}};'
               - not:
                   - api.connected:
-              - ${relay_${number}_type}.is_off: '${relay_${number}_type}${number}'
+              - switch.is_off: "switch${number}"
           then:
-            - ${relay_${number}_type}.toggle: '${relay_${number}_type}${number}'
+            - switch.toggle: "switch${number}"
       - homeassistant.event:
           event: esphome.switch
           data:
             device: ${name}
             action: click
-            button: '${number}'
+            button: "${number}"
   - timing:
       - ON for at most 0.5s
       - OFF for at most 0.5s
@@ -36,7 +35,7 @@ on_multi_click:
           data:
             device: ${name}
             action: double_click
-            button: '${number}'
+            button: "${number}"
   - timing:
       - ON for at most 0.5s
       - OFF for at most 0.5s
@@ -52,10 +51,10 @@ on_multi_click:
           data:
             device: ${name}
             action: four_clicks
-            button: '${number}'
-      - ${relay_${number}_type}.toggle: '${relay_${number}_type}${number}'
+            button: "${number}"
+      - switch.toggle: "switch${number}"
   - timing:
-      - 'ON for at least ${button_${number}_hold}'
+      - "ON for at least ${button_${number}_hold}"
       # - OFF for at least 0.2s
     then:
       - homeassistant.event:
@@ -63,4 +62,8 @@ on_multi_click:
           data:
             device: ${name}
             action: hold
-            button: '${number}'
+            button: "${number}"
+  - timing:
+      - "ON for at least 10s"
+    then:
+      - button.press: restart_button

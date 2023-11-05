@@ -2,12 +2,8 @@
 substitutions:
   name: kayas-switch
   friendly_name: Kaya's Switch
-  ip: '10.6.6.149'
+  ip: "10.6.6.149"
   wifi_reboot_timeout: 0s
-  switch_relay_1: "false"
-  switch_relay_2: "false"
-  switch_relay_3: "false"
-  button_3_hold: 1s
 
 packages:
   common: !include modules/common-8266.yaml
