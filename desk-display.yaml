@@ -17,7 +17,7 @@ light:
     rmt_channel: 3
     max_refresh_rate: 10ms
 
-    name: 'Matrix'
+    name: None
     id: matrix
     color_correct: [50%, 50%, 50%]
     default_transition_length: 0s
@@ -86,7 +86,7 @@ display:
 
 font:
   - id: font_8bithud
-    file: 'fonts/8-bit-hud2.ttf'
+    file: fonts/8-bit-hud2.ttf
     size: 5
     # yamllint disable-line rule:line-length
     glyphs: '!"%()+,-_.:*=°?~#0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz'
