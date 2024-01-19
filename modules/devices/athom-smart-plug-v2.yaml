@@ -2,9 +2,13 @@
 substitutions:
   board: esp8285
   restore_mode: ALWAYS_OFF
+  zero_power_below: "0"
 
 packages:
   common: !include ../common-8266.yaml
+
+logger:
+  baud_rate: 0
 
 uart:
   rx_pin: GPIO3
@@ -18,7 +22,7 @@ binary_sensor:
         input: true
         pullup: true
       inverted: true
-    name: "${friendly_name} Power Button"
+    name: "Power Button"
     disabled_by_default: true
     on_multi_click:
       - timing:
@@ -35,14 +39,20 @@ sensor:
   - platform: cse7766
     update_interval: 10s
     current:
-      name: "${friendly_name} Current"
+      name: "Current"
     voltage:
-      name: "${friendly_name} Voltage"
+      name: "Voltage"
     power:
-      name: "${friendly_name} Power"
-      id: socket_my_power
+      name: "Power"
+      filters:
+        - lambda: |-
+            if (x < ${zero_power_below}) {
+              return 0;
+            } else {
+              return x;
+            }
     energy:
-      name: "${friendly_name} Energy"
+      name: "Energy"
       unit_of_measurement: kWh
       filters:
         - multiply: 0.001
@@ -56,7 +66,7 @@ switch:
 
 light:
   - platform: status_led
-    name: "${friendly_name} Status LED"
+    name: "Status LED"
     pin:
       number: GPIO13
       inverted: true
