@@ -37,14 +37,18 @@ binary_sensor:
 
 sensor:
   - platform: cse7766
-    update_interval: 10s
     current:
       name: "Current"
+      filters:
+        - throttle_average: 10s
     voltage:
       name: "Voltage"
+      filters:
+        - throttle_average: 10s
     power:
       name: "Power"
       filters:
+        - throttle_average: 10s
         - lambda: |-
             if (x < ${zero_power_below}) {
               return 0;
@@ -56,6 +60,7 @@ sensor:
       unit_of_measurement: kWh
       filters:
         - multiply: 0.001
+        - throttle: 10s
 
 switch:
   - platform: gpio
