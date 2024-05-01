@@ -38,10 +38,11 @@ switch:
     turn_off_action:
       then:
         - script.stop: run_timer
+        - switch.turn_on: pump
 
 script:
   - id: run_timer
-    mode: single
+    mode: queued
     then:
       - switch.turn_on: pump
       - delay: !lambda "return id(run_time).state * 60 * 1000;"
@@ -51,3 +52,4 @@ script:
 
 web_server:
   include_internal: true
+  version: 3
