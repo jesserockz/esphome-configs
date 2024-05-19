@@ -1,2 +1,0 @@
----
-sensor: !include_dir_list sensors

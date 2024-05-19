@@ -5,7 +5,7 @@ substitutions:
 esp32:
   board: ${board}
   framework:
-    type: arduino
+    type: esp-idf
 
 packages:
   base: !include common-base.yaml

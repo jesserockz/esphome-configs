@@ -1,4 +1,7 @@
 ---
+substitutions:
+  framework: esp-idf
+
 esphome:
   name: $name
 
@@ -6,7 +9,7 @@ esp32:
   variant: ESP32S2
   board: esp32-s2-saola-1
   framework:
-    type: esp-idf
+    type: ${framework}
 
 packages:
   base: !include common-base.yaml

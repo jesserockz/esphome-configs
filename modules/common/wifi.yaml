@@ -14,3 +14,5 @@ sensor:
     name: "WiFi Signal"
     update_interval: 60s
     id: wifi_signal_sensor
+
+captive_portal:

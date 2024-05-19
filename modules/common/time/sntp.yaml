@@ -1,5 +1,0 @@
----
-platform: sntp
-id: sntp_time
-servers:
-  - 10.6.6.1
