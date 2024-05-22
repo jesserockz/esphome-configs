@@ -1,3 +1,4 @@
+---
 substitutions:
   board: esp32-s3-devkitc-1
 
@@ -64,7 +65,7 @@ touchscreen:
     id: touch
     i2c_id: internal_i2c
     address: 0x38
-    # interrupt_pin: GPIO14 # not supported by this component
+    # interrupt_pin: GPIO14  # not supported by this component
 
 light:
   - platform: monochromatic

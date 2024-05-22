@@ -1,3 +1,4 @@
+---
 substitutions:
   name: m5stack-dial-1
   friendly_name: M5Stack Dial 1
@@ -26,6 +27,6 @@ light:
     restore_mode: ALWAYS_ON
 
 i2c:
-  - id: external_i2c # Red port
+  - id: external_i2c  # Red port
     sda: GPIO13
     scl: GPIO15
