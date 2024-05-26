@@ -1,0 +1,38 @@
+i2c:
+  sda: GPIO6
+  scl: GPIO7
+
+binary_sensor:
+  - platform: gpio
+    pin:
+      number: GPIO5
+      mode: INPUT_PULLUP
+    name: Contact
+    id: contact
+
+sensor:
+  - platform: vl53l0x
+    name: Sensor distance
+    id: range_sensor
+    update_interval: 1s
+    long_range: true
+    accuracy_decimals: 2
+    entity_category: diagnostic
+
+output:
+  - id: opener
+    platform: gpio
+    pin: GPIO1
+
+light:
+  - platform: status_led
+    id: blue_status_led
+    pin: GPIO18
+
+output:
+  - platform: ledc
+    pin: GPIO4
+    id: buzzer
+
+rtttl:
+  output: buzzer
