@@ -56,12 +56,12 @@ binary_sensor:
         return true;
       }
       return {};
-    on_press: # Door has opened fully
+    on_press:
       - cover.template.publish:
           id: garage_door
           state: OPEN
           current_operation: IDLE
-    on_release: # Door is closing
+    on_release:
       - cover.template.publish:
           id: garage_door
           position: 0.5
@@ -71,13 +71,13 @@ binary_sensor:
     name: Door Closed Sensor
     entity_category: diagnostic
     device_class: garage_door
-    on_press: # Door is opening
+    on_press:
       - cover.template.publish:
           id: garage_door
           position: 0.5
           current_operation: OPENING
       - component.resume: range_sensor
-    on_release: # Door is fully closed
+    on_release:
       - cover.template.publish:
           id: garage_door
           state: CLOSED

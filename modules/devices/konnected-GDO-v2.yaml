@@ -1,3 +1,4 @@
+---
 i2c:
   sda: GPIO6
   scl: GPIO7
@@ -23,16 +24,14 @@ output:
   - id: opener
     platform: gpio
     pin: GPIO1
+  - platform: ledc
+    pin: GPIO4
+    id: buzzer
 
 light:
   - platform: status_led
     id: blue_status_led
     pin: GPIO18
-
-output:
-  - platform: ledc
-    pin: GPIO4
-    id: buzzer
 
 rtttl:
   output: buzzer
