@@ -41,11 +41,15 @@ binary_sensor:
   - platform: gpio
     name: Button
     id: front_button
-    pin: GPIO42
+    pin:
+      number: GPIO42
+      inverted: true
 
+switch:
   - platform: gpio
-    name: Hold Button
+    name: Power
     pin: GPIO46
+    restore_mode: ALWAYS_ON
 
 spi:
   id: spi_bus
@@ -59,13 +63,14 @@ display:
     cs_pin: GPIO7
     reset_pin: GPIO8
     dc_pin: GPIO4
+    invert_colors: false
 
 touchscreen:
   - platform: ft5x06
     id: touch
     i2c_id: internal_i2c
     address: 0x38
-    # interrupt_pin: GPIO14  # not supported by this component
+    interrupt_pin: GPIO14
 
 light:
   - platform: monochromatic
