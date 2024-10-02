@@ -39,7 +39,7 @@ jobs:
         # yamllint disable rule:line-length
         run: |-
           files=$(find . -maxdepth 1 -type f -name "*.yaml" -not -name "secrets.yaml" -not -name "secrets.ci.yaml" | jq -Rcns 'inputs | . / "\n" | map(select(length > 0) | sub("./";"")) ')
-          echo ::set-output name=files::$files
+          echo files=$files >> $GITHUB_OUTPUT
         # yamllint enable rule:line-length
 
   configs:
