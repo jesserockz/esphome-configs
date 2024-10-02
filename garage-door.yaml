@@ -105,7 +105,8 @@ cover:
             lambda: |-
               return (
                 id(garage_door).position == 0.5 &&
-                id(garage_door).current_operation == CoverOperation::COVER_OPERATION_IDLE
+                id(garage_door).current_operation ==
+                  CoverOperation::COVER_OPERATION_IDLE
               );
           then:
             - button.press: opener_button
@@ -120,7 +121,8 @@ cover:
             lambda: |-
               return (
                 id(garage_door).position != COVER_OPEN &&
-                id(garage_door).current_operation != CoverOperation::COVER_OPERATION_OPENING
+                id(garage_door).current_operation !=
+                  CoverOperation::COVER_OPERATION_OPENING
               );
           then:
             - button.press: opener_button
@@ -131,7 +133,9 @@ cover:
     close_action:
       - if:
           condition:
-            lambda: return id(garage_door).current_operation == CoverOperation::COVER_OPERATION_OPENING;
+            lambda: |-
+              return id(garage_door).current_operation ==
+                CoverOperation::COVER_OPERATION_OPENING;
           then:
             - button.press: opener_button
             - cover.template.publish:
@@ -150,7 +154,8 @@ cover:
                   lambda: |-
                     return (
                       id(garage_door).position != COVER_CLOSED &&
-                      id(garage_door).current_operation != CoverOperation::COVER_OPERATION_CLOSING
+                      id(garage_door).current_operation !=
+                        CoverOperation::COVER_OPERATION_CLOSING
                     );
                 then:
                   - button.press: opener_button
@@ -161,7 +166,9 @@ cover:
     stop_action:
       - if:
           condition:
-            lambda: return id(garage_door).current_operation == CoverOperation::COVER_OPERATION_OPENING;
+            lambda: |-
+              return id(garage_door).current_operation ==
+                CoverOperation::COVER_OPERATION_OPENING;
           then:
             - button.press: opener_button
             - cover.template.publish:
@@ -170,7 +177,9 @@ cover:
                 current_operation: IDLE
       - if:
           condition:
-            lambda: return id(garage_door).current_operation == CoverOperation::COVER_OPERATION_CLOSING;
+            lambda: |-
+              return id(garage_door).current_operation ==
+                CoverOperation::COVER_OPERATION_CLOSING;
           then:
             - button.press: opener_button
             - cover.template.publish:

@@ -1,11 +1,12 @@
+---
 substitutions:
   name: "energy-monitor-6"
   friendly_name: "Energy Monitor 6"
 
   bl0906_tx_pin: GPIO7
   bl0906_rx_pin: GPIO8
-  button_pin:    GPIO9
-  led_pin:       GPIO10
+  button_pin: GPIO9
+  led_pin: GPIO10
 
 packages:
   common: !include modules/common-32-c3.yaml

@@ -22,7 +22,8 @@ api:
         - delay: 1s
         - lambda: |-
             int x_offset, baseline, width, height;
-            id(font_8bithud)->measure(id(notification_text).state.c_str(), &width, &x_offset, &baseline, &height);
+            id(font_8bithud)->measure(id(notification_text).state.c_str(), &width,
+                                      &x_offset, &baseline, &height);
             id(text_width) = width;
         - repeat:
             count: !lambda "return id(text_width) - 16;"
@@ -127,7 +128,8 @@ display:
           Color color(light_color.get_red() * 255, light_color.get_green() * 255,
                       light_color.get_blue() * 255);
 
-          it.print(id(scroller_position), 0, id(font_8bithud), color, id(notification_text).state.c_str());
+          it.print(id(scroller_position), 0, id(font_8bithud),
+                   color, id(notification_text).state.c_str());
 
 font:
   - id: font_8bithud
