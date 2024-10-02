@@ -2,10 +2,12 @@
 substitutions:
   name: master-heater
   friendly_name: Master Heater
-  ip: '10.6.6.227'
+  ip: "10.6.6.227"
   wifi_reboot_timeout: 5min
 
 packages:
+  common: !include modules/common-8266.yaml
+  wifi: !include modules/common/wifi.yaml
   heater: !include modules/devices/kogan-heater-black.yaml
 
 # packages override order doesn't work.
