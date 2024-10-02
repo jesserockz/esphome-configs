@@ -14,11 +14,11 @@ esp32:
     # version: "4.4.0"
     # sdkconfig_options:
     #   CONFIG_BT_BLE_42_FEATURES_SUPPORTED: y
-      # CONFIG_ESP_CONSOLE_UART_CUSTOM: y
-      # CONFIG_ESP_CONSOLE_USB_SERIAL_JTAG: y
+    #   CONFIG_ESP_CONSOLE_UART_CUSTOM: y
+    #   CONFIG_ESP_CONSOLE_USB_SERIAL_JTAG: y
 
 packages:
   base: !include common-base.yaml
 
 logger:
-  # deassert_rts_dtr: true
+#   deassert_rts_dtr: true
