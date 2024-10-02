@@ -56,6 +56,8 @@ binary_sensor:
         return true;
       }
       return {};
+    filters:
+      - delayed_on: 1.5s
     on_press:
       - cover.template.publish:
           id: garage_door

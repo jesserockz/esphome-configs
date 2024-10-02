@@ -6,6 +6,7 @@ substitutions:
 
 packages:
   common: !include modules/devices/kogan-pet-fountain.yaml
+  wifi: !include modules/common/wifi.yaml
 
 number:
   - platform: template
@@ -31,7 +32,7 @@ switch:
   - platform: template
     name: "Timer"
     id: timer_switch
-    lambda: return id(run_timer).is_running();
+    optimistic: true
     restore_mode: RESTORE_DEFAULT_ON
     turn_on_action:
       - script.execute: run_timer

@@ -14,3 +14,4 @@ esp32:
 
 packages:
   base: !include common-base.yaml
+  wifi: !include common/wifi.yaml

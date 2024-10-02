@@ -1,0 +1,22 @@
+---
+substitutions:
+  board: esp32-s3-devkitc-1
+
+esp32:
+  variant: ESP32S3
+  board: ${board}
+  framework:
+    type: arduino
+    # type: esp-idf
+    # version: dev
+
+    # sdkconfig_options:
+    #   CONFIG_ESP_CONSOLE_UART_CUSTOM: y
+    #   CONFIG_ESP_CONSOLE_USB_SERIAL_JTAG: y
+
+packages:
+  base: !include common-base.yaml
+
+# logger:
+#   hardware_uart: usb_serial_jtag
+#   deassert_rts_dtr: true
