@@ -8,6 +8,7 @@ esphome:
 
 ota:
   - platform: esphome
+    id: ota_esphome
 
 api:
   reboot_timeout: $api_reboot_timeout

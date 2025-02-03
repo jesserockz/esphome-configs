@@ -8,4 +8,5 @@ substitutions:
 
 packages:
   common: !include modules/common-8266.yaml
+  wifi: !include modules/common/wifi.yaml
   panasonic: !include modules/devices/panasonic-ac.yaml

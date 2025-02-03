@@ -1,6 +1,7 @@
 ---
 packages:
   common: !include ../common-8266.yaml
+  wifi: !include ../common/wifi.yaml
 
 api:
   services:

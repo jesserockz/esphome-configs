@@ -56,8 +56,9 @@ light:
     pin: GPIO13
     num_leds: 256
     rgb_order: GRB
-    rmt_channel: 3
+    rmt_symbols: 192
     max_refresh_rate: 10ms
+    use_psram: false
 
     name: None
     id: matrix
@@ -136,7 +137,7 @@ font:
     file: fonts/8-bit-hud2.ttf
     size: 5
     # yamllint disable-line rule:line-length
-    glyphs: '!"%()+,-_.:*=°?~#0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz'
+    glyphs: '!"%()+,-_.:*=?~#0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz'
 
 switch:
   - platform: template

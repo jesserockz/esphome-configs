@@ -2,6 +2,10 @@
 substitutions:
   restore_mode: RESTORE_DEFAULT_OFF
 
+packages:
+  common: !include ../common-32-c3.yaml
+  wifi: !include ../common/wifi.yaml
+
 logger:
   baud_rate: 0
   deassert_rts_dtr: true
@@ -15,7 +19,7 @@ binary_sensor:
     pin:
       number: GPIO9
       inverted: true
-    name: "${friendly_name} Power Button"
+    name: "Power Button"
     on_multi_click:
       - timing:
           - ON for at most 1s
@@ -31,15 +35,15 @@ sensor:
   - platform: cse7766
     update_interval: 5s
     current:
-      name: "${friendly_name} Current"
+      name: "Current"
     voltage:
-      name: "${friendly_name} Voltage"
+      name: "Voltage"
     power:
-      name: "${friendly_name} Power"
+      name: "Power"
       id: power
 
   - platform: total_daily_energy
-    name: "${friendly_name} Total Daily Energy"
+    name: "Total Daily Energy"
     power_id: power
     unit_of_measurement: kWh
     accuracy_decimals: 3
@@ -55,7 +59,7 @@ switch:
 
 light:
   - platform: status_led
-    name: "${friendly_name} Blue LED"
+    name: "Blue LED"
     pin:
       inverted: true
       number: GPIO8

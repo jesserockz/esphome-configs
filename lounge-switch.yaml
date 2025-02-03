@@ -7,6 +7,7 @@ substitutions:
 
 packages:
   common: !include modules/common-8266.yaml
+  wifi: !include modules/common/wifi.yaml
   zemismart: !include modules/devices/zemismart/3gang.yaml
 
   wizmote: !include modules/wizmote.yaml

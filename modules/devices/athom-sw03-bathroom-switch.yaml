@@ -1,6 +1,7 @@
 ---
 packages:
   common: !include ../common-8266.yaml
+  wifi: !include ../common/wifi.yaml
 
 binary_sensor:
   # Touch Buttons
@@ -8,7 +9,7 @@ binary_sensor:
     pin:
       inverted: true
       number: GPIO12
-    name: "${friendly_name} Button 1"
+    name: "Button 1"
     disabled_by_default: true
     on_multi_click:
       - timing:
@@ -24,7 +25,7 @@ binary_sensor:
     pin:
       inverted: true
       number: GPIO3
-    name: "${friendly_name} Button 2"
+    name: "Button 2"
     disabled_by_default: true
     on_click:
       max_length: 0.5s
@@ -34,7 +35,7 @@ binary_sensor:
     pin:
       inverted: true
       number: GPIO5
-    name: "${friendly_name} Button 3"
+    name: "Button 3"
     disabled_by_default: true
     on_click:
       max_length: 0.5s
@@ -69,7 +70,7 @@ output:
 
 light:
   - platform: status_led
-    name: "${friendly_name} Status LED"
+    name: "Status LED"
     disabled_by_default: true
     pin:
       number: GPIO0
@@ -77,7 +78,7 @@ light:
 
   # Relays
   - platform: binary
-    name: "${friendly_name} Heat Lamps"
+    name: "Heat Lamps"
     id: light1
     output: relay1
     restore_mode: ALWAYS_OFF
@@ -97,7 +98,7 @@ light:
       - light.turn_off: led2
 
   # - platform: binary
-  #   name: "${friendly_name} Light 3"
+  #   name: "Light 3"
   #   id: light3
   #   output: relay3
   #   on_turn_on:
@@ -107,21 +108,21 @@ light:
 
   # Button LEDs
   - platform: binary
-    name: "${friendly_name} LED1"
+    name: "LED1"
     disabled_by_default: true
     id: led1
     output: button_led1
     # default_transition_length: 500ms
 
   - platform: binary
-    name: "${friendly_name} LED2"
+    name: "LED2"
     disabled_by_default: true
     id: led2
     output: button_led2
     # default_transition_length: 500ms
 
   - platform: binary
-    name: "${friendly_name} LED3"
+    name: "LED3"
     disabled_by_default: true
     id: led3
     output: button_led3

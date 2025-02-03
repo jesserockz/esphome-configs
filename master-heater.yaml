@@ -6,8 +6,6 @@ substitutions:
   wifi_reboot_timeout: 5min
 
 packages:
-  common: !include modules/common-8266.yaml
-  wifi: !include modules/common/wifi.yaml
   heater: !include modules/devices/kogan-heater-black.yaml
 
 # packages override order doesn't work.
