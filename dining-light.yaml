@@ -8,4 +8,3 @@ substitutions:
 
 packages:
   light: !include modules/devices/athom-rgbct-light.yaml
-  wifi: !include modules/common/wifi.yaml
