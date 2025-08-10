@@ -1,45 +1,29 @@
 ---
-binary_sensor:
-  - <<: !include
+
+packages:
+  - !include
       file: button.yaml
       vars:
         number: "1"
-        gpio_pin: GPIO16
-  - <<: !include
+        button_pin: GPIO16
+        relay_pin: GPIO13
+        interrupt: "false"
+        button_hold: "2s"
+  - !include
       file: button.yaml
       vars:
         number: "2"
-        gpio_pin: GPIO5
-  - <<: !include
+        button_pin: GPIO5
+        relay_pin: GPIO12
+        toggle: "true"
+        button_hold: "2s"
+  - !include
       file: button.yaml
       vars:
         number: "3"
-        gpio_pin: GPIO4
-
-output:
-  - platform: gpio
-    id: relay1
-    pin: GPIO13
-  - platform: gpio
-    id: relay2
-    pin: GPIO12
-  - platform: gpio
-    id: relay3
-    pin: GPIO14
-
-switch:
-  - platform: output
-    id: switch1
-    output: relay1
-    name: Relay 1
-  - platform: output
-    id: switch2
-    output: relay2
-    name: Relay 2
-  - platform: output
-    id: switch3
-    output: relay3
-    name: Relay 3
+        button_pin: GPIO4
+        relay_pin: GPIO14
+        button_hold: "2s"
 
 light:
   - platform: status_led
@@ -48,8 +32,3 @@ light:
     pin:
       number: GPIO2
       inverted: true
-
-substitutions:
-  button_1_hold: 2s
-  button_2_hold: 2s
-  button_3_hold: 2s

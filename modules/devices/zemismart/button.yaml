@@ -1,69 +1,95 @@
 ---
-platform: gpio
-pin:
-  inverted: true
-  number: ${gpio_pin}
-name: "Button ${number}"
-disabled_by_default: true
-on_multi_click:
-  - timing:
-      - ON for at most 0.5s
-      - OFF for at least 0.5s
-    then:
-      - if:
-          condition:
-            or:
-              - not:
-                  - api.connected:
-              - switch.is_off: "switch${number}"
-          then:
-            - switch.toggle: "switch${number}"
-      - homeassistant.event:
-          event: esphome.switch
-          data:
-            device: ${name}
-            action: click
-            button: "${number}"
-  - timing:
-      - ON for at most 0.5s
-      - OFF for at most 0.5s
-      - ON for at most 0.5s
-      - OFF for at least 0.5s
-    then:
-      - homeassistant.event:
-          event: esphome.switch
-          data:
-            device: ${name}
-            action: double_click
-            button: "${number}"
-  - timing:
-      - ON for at most 0.5s
-      - OFF for at most 0.5s
-      - ON for at most 0.5s
-      - OFF for at most 0.5s
-      - ON for at most 0.5s
-      - OFF for at most 0.5s
-      - ON for at most 0.5s
-      - OFF for at least 0.2s
-    then:
-      - homeassistant.event:
-          event: esphome.switch
-          data:
-            device: ${name}
-            action: four_clicks
-            button: "${number}"
-      - switch.toggle: "switch${number}"
-  - timing:
-      - "ON for at least ${button_${number}_hold}"
-      # - OFF for at least 0.2s
-    then:
-      - homeassistant.event:
-          event: esphome.switch
-          data:
-            device: ${name}
-            action: hold
-            button: "${number}"
-  - timing:
-      - "ON for at least 10s"
-    then:
-      - button.press: restart_button
+defaults:
+  interrupt: "true"
+  button_hold: "2s"
+
+binary_sensor:
+  - platform: gpio
+    pin:
+      inverted: true
+      number: ${button_pin}
+    name: "Button ${number}"
+    disabled_by_default: true
+    use_interrupt: ${interrupt}
+    on_multi_click:
+      - timing:
+          - ON for at most 0.5s
+          - OFF for at least 0.5s
+        then:
+          - if:
+              condition:
+                or:
+                  - switch.is_off: switch_${number}_detach
+                  - not:
+                      - api.connected:
+                  - switch.is_off: "switch_${number}"
+              then:
+                - switch.toggle: "switch_${number}"
+          - event.trigger:
+              id: event_button_${number}
+              event_type: click
+      - timing:
+          - ON for at most 0.5s
+          - OFF for at most 0.5s
+          - ON for at most 0.5s
+          - OFF for at least 0.5s
+        then:
+          - event.trigger:
+              id: event_button_${number}
+              event_type: double_click
+      - timing:
+          - ON for at most 0.5s
+          - OFF for at most 0.5s
+          - ON for at most 0.5s
+          - OFF for at most 0.5s
+          - ON for at most 0.5s
+          - OFF for at most 0.5s
+          - ON for at most 0.5s
+          - OFF for at least 0.2s
+        then:
+          - if:
+              condition:
+                - switch.is_on: switch_${number}_detach
+              then:
+                - switch.toggle: "switch_${number}"
+          - event.trigger:
+              id: event_button_${number}
+              event_type: four_clicks
+      - timing:
+          - "ON for at least ${button_hold}"
+        then:
+          - event.trigger:
+              id: event_button_${number}
+              event_type: hold
+      - timing:
+          - "ON for at least 10s"
+        then:
+          - button.press: restart_button
+
+event:
+  - platform: template
+    name: Button ${number}
+    id: event_button_${number}
+    event_types:
+      - click
+      - double_click
+      - four_clicks
+      - hold
+
+output:
+  - platform: gpio
+    id: relay_${number}
+    pin: ${relay_pin}
+
+switch:
+  - platform: output
+    id: switch_${number}
+    output: relay_${number}
+    name: "Relay ${number}"
+
+  - platform: template
+    id: switch_${number}_detach
+    name: "Relay ${number} Detach"
+    entity_category: config
+    optimistic: true
+    restore_mode: RESTORE_DEFAULT_OFF
