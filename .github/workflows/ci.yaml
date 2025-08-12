@@ -23,7 +23,7 @@ jobs:
       - name: ⤵️ Check out configuration from GitHub
         uses: actions/checkout@v4.2.2
       - name: 🚀 Run yamllint
-        run: yamllint
+        run: yamllint .
 
   prepare:
     runs-on: ubuntu-latest
