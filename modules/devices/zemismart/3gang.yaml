@@ -2,28 +2,28 @@
 
 packages:
   - !include
-      file: button.yaml
-      vars:
-        number: "1"
-        button_pin: GPIO16
-        relay_pin: GPIO13
-        interrupt: "false"
-        button_hold: "2s"
+    file: button.yaml
+    vars:
+      number: "1"
+      button_pin: GPIO16
+      relay_pin: GPIO13
+      interrupt: "false"
+      button_hold: "2s"
   - !include
-      file: button.yaml
-      vars:
-        number: "2"
-        button_pin: GPIO5
-        relay_pin: GPIO12
-        toggle: "true"
-        button_hold: "2s"
+    file: button.yaml
+    vars:
+      number: "2"
+      button_pin: GPIO5
+      relay_pin: GPIO12
+      toggle: "true"
+      button_hold: "2s"
   - !include
-      file: button.yaml
-      vars:
-        number: "3"
-        button_pin: GPIO4
-        relay_pin: GPIO14
-        button_hold: "2s"
+    file: button.yaml
+    vars:
+      number: "3"
+      button_pin: GPIO4
+      relay_pin: GPIO14
+      button_hold: "2s"
 
 light:
   - platform: status_led
