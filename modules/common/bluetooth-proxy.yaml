@@ -1,0 +1,26 @@
+esp32_ble_tracker:
+  id: tracker
+  scan_parameters:
+    active: false  # default true
+
+bluetooth_proxy:
+  id: my_bluetooth_proxy
+  active: true
+
+select:
+  - platform: template
+    name: Scanner Mode
+    id: scanner_mode
+    options:
+      - "Passive"
+      - "Active"
+    lambda: |-
+      if (id(tracker).get_scan_active()) {
+        return {"Active"};
+      } else {
+        return {"Passive"};
+      }
+    set_action:
+      - lambda: |-
+          id(my_bluetooth_proxy).bluetooth_scanner_set_mode(x == "Active");
+      - component.update: scanner_mode

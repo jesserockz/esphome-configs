@@ -5,8 +5,15 @@ substitutions:
   wifi_reboot_timeout: 15min
 
 packages:
-  common: !include modules/common-32-idf.yaml
+  common: !include modules/common-esp32.yaml
   wifi: !include modules/common/wifi.yaml
+
+logger:
+  level: INFO
+  # level: VERY_VERBOSE
+
+wifi:
+  power_save_mode: none # maybe to help with led flickering?
 
 api:
   services:
@@ -56,9 +63,7 @@ light:
     pin: GPIO13
     num_leds: 256
     rgb_order: GRB
-    rmt_symbols: 192
     max_refresh_rate: 10ms
-    use_psram: false
 
     name: None
     id: matrix

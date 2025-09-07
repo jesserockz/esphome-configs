@@ -45,7 +45,7 @@ substitutions:
 ##################################
 
 packages:
-  common: !include modules/common-32-idf.yaml
+  common: !include modules/common-esp32.yaml
   wifi: !include modules/common/wifi.yaml
 
   master: !include
@@ -57,13 +57,13 @@ packages:
   garage: !include
     file: modules/alarm/zone.yaml
     vars:
-      name: Garage PIR Motion
+      name: Lounge PIR Motion
       zone: 2
       device_class: motion
   lounge: !include
     file: modules/alarm/zone.yaml
     vars:
-      name: Lounge PIR Motion
+      name: Garage PIR Motion
       zone: 3
       device_class: motion
 

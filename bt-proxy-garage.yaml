@@ -5,7 +5,8 @@ substitutions:
   board: esp32-poe-iso
 
 packages:
-  common: !include modules/common-32-idf.yaml
+  - !include modules/common-esp32.yaml
+  - !include modules/common/bluetooth-proxy.yaml
 
 logger:
   # level: INFO
@@ -16,25 +17,15 @@ ethernet:
   type: LAN8720
   mdc_pin: GPIO23
   mdio_pin: GPIO18
-  clk_mode: GPIO17_OUT
+  clk:
+    pin: GPIO17
+    mode: CLK_OUT
   phy_addr: 0
   power_pin: GPIO12
-
-esp32_ble_tracker:
-  scan_parameters:
-    active: false  # default true
-    interval: 1100ms
-    window: 1100ms
-
-bluetooth_proxy:
-  id: my_bluetooth_proxy
-  active: true
 
 esp32_ble_server:
   model: PoE-ISO
   manufacturer: Olimex
-
-psram:
 
 time:
   - id: !extend sntp_time

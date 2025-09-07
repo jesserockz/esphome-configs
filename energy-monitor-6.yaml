@@ -9,7 +9,7 @@ substitutions:
   led_pin: GPIO10
 
 packages:
-  common: !include modules/common-32-c3.yaml
+  common: !include modules/common-esp32c3.yaml
   wifi: !include modules/common/wifi.yaml
 
 preferences:
@@ -51,6 +51,8 @@ sensor:
       name: 'Temperature'
     voltage:
       name: 'Voltage'
+      filters:
+        - round: 1
     channel_1:
       power: Lights Power
       energy: Lights Energy

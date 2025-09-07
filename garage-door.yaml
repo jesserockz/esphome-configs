@@ -6,9 +6,9 @@ substitutions:
   margin_of_error: "0.05"
 
 packages:
-  common: !include modules/common-32-s3-idf.yaml
-  wifi: !include modules/common/wifi.yaml
-  konnected-gdo: !include modules/devices/konnected-GDO-v2.yaml
+  - !include modules/common-esp32s3.yaml
+  - !include modules/common/wifi.yaml
+  - !include modules/devices/konnected-GDO-v2.yaml
 
 esphome:
   on_boot:

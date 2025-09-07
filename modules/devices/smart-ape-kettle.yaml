@@ -3,7 +3,7 @@ substitutions:
   board: esp8285
 
 packages:
-  common: !include ../common-8266.yaml
+  common: !include ../common-esp8266.yaml
 
 # Dont actually use deep sleep,
 # but this should stop unavailable when the
@@ -27,6 +27,12 @@ switch:
     name: None
     icon: mdi:kettle
 
+# text_sensor:
+  - platform: tuya
+    switch_datapoint: 103
+    name: 103
+    icon: mdi:kettle
+
 sensor:
   - platform: tuya
     sensor_datapoint: 5
@@ -34,6 +40,16 @@ sensor:
     unit_of_measurement: °C
     device_class: temperature
     state_class: measurement
+
+  - platform: tuya
+    sensor_datapoint: 103
+    name: 103
+    icon: mdi:kettle
+
+  - platform: tuya
+    sensor_datapoint: 101
+    name: 101
+    icon: mdi:kettle
 
 select:
   - platform: tuya
@@ -46,3 +62,11 @@ select:
       4: 90°C
       5: "Off"
     name: Keep Warm
+
+number:
+  - platform: tuya
+    number_datapoint: 103
+    name: 103
+    min_value: 0
+    max_value: 1
+    step: 1

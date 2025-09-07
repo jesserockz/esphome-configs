@@ -1,6 +1,6 @@
 ---
 packages:
-  common: !include ../common-8266.yaml
+  common: !include ../common-esp8266.yaml
   wifi: !include ../common/wifi.yaml
 
 esp8266:

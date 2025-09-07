@@ -1,10 +1,6 @@
 ---
-substitutions:
-  board: esp32-s3-devkitc-1
-
 esp32:
-  variant: ESP32S3
-  board: ${board}
+  variant: esp32
   framework:
     type: esp-idf
 

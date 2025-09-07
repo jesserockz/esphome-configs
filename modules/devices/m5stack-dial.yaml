@@ -57,13 +57,13 @@ spi:
   clk_pin: GPIO6
 
 display:
-  - platform: ili9xxx
+  - platform: mipi_spi
     id: round_display
     model: GC9A01A
     cs_pin: GPIO7
     reset_pin: GPIO8
     dc_pin: GPIO4
-    invert_colors: false
+    invert_colors: true
 
 touchscreen:
   - platform: ft5x06

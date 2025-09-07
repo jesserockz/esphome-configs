@@ -5,7 +5,7 @@ substitutions:
   board: esp32-evb
 
 packages:
-  common: !include modules/common-32-idf.yaml
+  common: !include modules/common-esp32.yaml
 
 logger:
 # level: INFO
@@ -14,7 +14,9 @@ ethernet:
   type: LAN8720
   mdc_pin: GPIO23
   mdio_pin: GPIO18
-  clk_mode: GPIO17_OUT
+  clk:
+    pin: GPIO17
+    mode: CLK_OUT
   phy_addr: 0
 
 esp32_ble_tracker:

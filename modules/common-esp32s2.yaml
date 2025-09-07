@@ -1,9 +1,6 @@
 ---
-substitutions:
-  board: esp32dev
-
 esp32:
-  board: ${board}
+  variant: esp32s2
   framework:
     type: esp-idf
 

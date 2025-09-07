@@ -3,7 +3,7 @@ substitutions:
   board: esp8285
 
 packages:
-  common: !include ../common-8266.yaml
+  common: !include ../common-esp8266.yaml
 
 logger:
   baud_rate: 0
@@ -37,6 +37,11 @@ sensor:
     sensor_datapoint: 108
     id: dp_108
 
+text_sensor:
+  - platform: tuya
+    sensor_datapoint: 112
+    id: dp_112
+
 switch:
   - platform: tuya
     switch_datapoint: 101
@@ -62,6 +67,13 @@ number:
   - platform: tuya
     number_datapoint: 102
     id: number_102
+    min_value: 0
+    max_value: 255
+    step: 1
+
+  - platform: tuya
+    number_datapoint: 108
+    id: number_108
     min_value: 0
     max_value: 255
     step: 1

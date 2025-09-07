@@ -1,8 +1,0 @@
----
-binary_sensor:
-  - platform: gpio
-    pin:
-      number: GPIO0
-      inverted: true
-    id: io0_button
-    name: 'Button'

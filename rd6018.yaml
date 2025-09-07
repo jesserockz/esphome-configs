@@ -5,7 +5,7 @@ substitutions:
   board: esp12e
 
 packages:
-  common: !include modules/common-8266.yaml
+  common: !include modules/common-esp8266.yaml
   wifi: !include modules/common/wifi.yaml
 
 logger:

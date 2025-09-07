@@ -4,7 +4,7 @@ substitutions:
   friendly_name: "Laundry LED Strip"
 
 packages:
-  common: !include modules/common-8266.yaml
+  common: !include modules/common-esp8266.yaml
   wifi: !include modules/common/wifi.yaml
 
 binary_sensor:

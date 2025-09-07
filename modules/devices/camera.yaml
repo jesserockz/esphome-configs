@@ -1,7 +1,7 @@
 ---
 esp32_camera:
   name: "${friendly_name}"
-  internal: true
+  # internal: true
   external_clock:
     pin: 0
     frequency: 20MHz
@@ -21,5 +21,5 @@ output:
 
 light:
   - platform: binary
-    name: "${friendly_name} Flash"
+    name: "Flash"
     output: flash_output
