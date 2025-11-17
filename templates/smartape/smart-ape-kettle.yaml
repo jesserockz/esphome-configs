@@ -28,10 +28,10 @@ switch:
     icon: mdi:kettle
 
 # text_sensor:
-  - platform: tuya
-    switch_datapoint: 103
-    name: 103
-    icon: mdi:kettle
+#   - platform: tuya
+#     switch_datapoint: 103
+#     name: 103
+#     icon: mdi:kettle
 
 sensor:
   - platform: tuya

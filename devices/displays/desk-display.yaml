@@ -13,7 +13,7 @@ logger:
   # level: VERY_VERBOSE
 
 wifi:
-  power_save_mode: none # maybe to help with led flickering?
+  power_save_mode: none  # maybe to help with led flickering?
 
 api:
   services:
