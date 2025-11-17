@@ -1,0 +1,188 @@
+---
+substitutions:
+  name: garage-door
+  friendly_name: Garage Door
+
+  margin_of_error: "0.05"
+
+packages:
+  - !include ../../common/platforms/common-esp32s3.yaml
+  - !include ../../common/wifi.yaml
+  - !include ../../templates/other/konnected-GDO-v2.yaml
+
+esphome:
+  on_boot:
+    priority: -1000
+    then:
+      - delay: 1s
+      - if:
+          condition:
+            binary_sensor.is_off: contact
+          then:
+            - component.suspend: range_sensor
+          else:
+            - cover.template.publish:
+                id: garage_door
+                state: CLOSED
+                current_operation: IDLE
+
+number:
+  - platform: template
+    name: Sensor calibration
+    id: open_distance
+    icon: mdi:ruler
+    entity_category: config
+    unit_of_measurement: m
+    device_class: distance
+    step: 0.01
+    max_value: 2.0
+    min_value: 0.1
+    optimistic: true
+    restore_value: true
+
+binary_sensor:
+  - platform: template
+    id: garage_door_open
+    name: Door Open Sensor
+    entity_category: diagnostic
+    device_class: garage_door
+    lambda: |-
+      float calibrated_distance = id(open_distance).state;
+      if (std::isnan(id(range_sensor).state)) {
+        return false;
+      } else if (id(range_sensor).state > (calibrated_distance + $margin_of_error)) {
+        return false;
+      } else if (id(range_sensor).state > (calibrated_distance - $margin_of_error)) {
+        return true;
+      }
+      return {};
+    filters:
+      - delayed_on: 1.5s
+    on_press:
+      - cover.template.publish:
+          id: garage_door
+          state: OPEN
+          current_operation: IDLE
+    on_release:
+      - cover.template.publish:
+          id: garage_door
+          position: 0.5
+          current_operation: CLOSING
+
+  - id: !extend contact
+    name: Door Closed Sensor
+    entity_category: diagnostic
+    device_class: garage_door
+    on_press:
+      - cover.template.publish:
+          id: garage_door
+          position: 0.5
+          current_operation: OPENING
+      - component.resume: range_sensor
+    on_release:
+      - cover.template.publish:
+          id: garage_door
+          state: CLOSED
+          current_operation: IDLE
+      - component.suspend: range_sensor
+
+button:
+  - platform: output
+    id: opener_button
+    output: opener
+    duration: 300ms
+    internal: true
+
+cover:
+  - platform: template
+    name: None
+    id: garage_door
+    device_class: garage
+    has_position: true
+    open_action:
+      - if:
+          condition:
+            lambda: |-
+              return (
+                id(garage_door).position == 0.5 &&
+                id(garage_door).current_operation ==
+                  CoverOperation::COVER_OPERATION_IDLE
+              );
+          then:
+            - button.press: opener_button
+            - delay: 500ms
+            - button.press: opener_button
+            - cover.template.publish:
+                id: garage_door
+                position: 0.5
+                current_operation: OPENING
+      - if:
+          condition:
+            lambda: |-
+              return (
+                id(garage_door).position != COVER_OPEN &&
+                id(garage_door).current_operation !=
+                  CoverOperation::COVER_OPERATION_OPENING
+              );
+          then:
+            - button.press: opener_button
+            - cover.template.publish:
+                id: garage_door
+                position: 0.5
+                current_operation: OPENING
+    close_action:
+      - if:
+          condition:
+            lambda: |-
+              return id(garage_door).current_operation ==
+                CoverOperation::COVER_OPERATION_OPENING;
+          then:
+            - button.press: opener_button
+            - cover.template.publish:
+                id: garage_door
+                position: 0.5
+                current_operation: IDLE
+            - delay: 500ms
+            - button.press: opener_button
+            - cover.template.publish:
+                id: garage_door
+                position: 0.5
+                current_operation: CLOSING
+          else:
+            - if:
+                condition:
+                  lambda: |-
+                    return (
+                      id(garage_door).position != COVER_CLOSED &&
+                      id(garage_door).current_operation !=
+                        CoverOperation::COVER_OPERATION_CLOSING
+                    );
+                then:
+                  - button.press: opener_button
+                  - cover.template.publish:
+                      id: garage_door
+                      position: 0.5
+                      current_operation: CLOSING
+    stop_action:
+      - if:
+          condition:
+            lambda: |-
+              return id(garage_door).current_operation ==
+                CoverOperation::COVER_OPERATION_OPENING;
+          then:
+            - button.press: opener_button
+            - cover.template.publish:
+                id: garage_door
+                position: 0.5
+                current_operation: IDLE
+      - if:
+          condition:
+            lambda: |-
+              return id(garage_door).current_operation ==
+                CoverOperation::COVER_OPERATION_CLOSING;
+          then:
+            - button.press: opener_button
+            - cover.template.publish:
+                id: garage_door
+                position: 0.5
+                current_operation: OPENING

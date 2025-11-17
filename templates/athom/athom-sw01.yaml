@@ -1,0 +1,124 @@
+---
+substitutions:
+  board: esp8285
+  button_hold: 2s
+
+packages:
+  common: !include ../../common/platforms/common-esp8266.yaml
+  wifi: !include ../../common/wifi.yaml
+
+binary_sensor:
+  # Switch
+  - platform: gpio
+    pin:
+      inverted: true
+      number: GPIO3
+    name: "Button"
+    disabled_by_default: true
+    on_multi_click:
+      - timing:
+          - ON for at most 0.5s
+          - OFF for at least 0.5s
+        then:
+          - homeassistant.event:
+              event: esphome.switch
+              data:
+                device: ${name}
+                action: click
+                button: "1"
+          - if:
+              condition:
+                or:
+                  - not:
+                      api.connected:
+                  - switch.is_off: relay_sw
+                  - switch.is_off: detach_relay
+              then:
+                - switch.toggle: relay_sw
+      - timing:
+          - ON for at most 0.5s
+          - OFF for at most 0.5s
+          - ON for at most 0.5s
+          - OFF for at least 0.5s
+        then:
+          - homeassistant.event:
+              event: esphome.switch
+              data:
+                device: ${name}
+                action: double_click
+                button: "1"
+      - timing:
+          - ON for at most 0.5s
+          - OFF for at most 0.5s
+          - ON for at most 0.5s
+          - OFF for at most 0.5s
+          - ON for at most 0.5s
+          - OFF for at most 0.5s
+          - ON for at most 0.5s
+          - OFF for at least 0.2s
+        then:
+          - homeassistant.event:
+              event: esphome.switch
+              data:
+                device: ${name}
+                action: four_clicks
+                button: "1"
+          - switch.toggle: relay_sw
+      - timing:
+          - ON for at least ${button_hold}
+        then:
+          - homeassistant.event:
+              event: esphome.switch
+              data:
+                device: ${name}
+                action: hold
+                button: "1"
+      - timing:
+          - ON for at least 10s
+        then:
+          - button.press: restart_button
+
+output:
+  # Relay
+  - platform: gpio
+    pin: GPIO13
+    id: relay1
+
+  # Button LED (1.0 = Blue / 0.0 = Red)
+  - platform: esp8266_pwm
+    pin: GPIO14
+    inverted: true
+    id: button_led1
+
+light:
+  - platform: status_led
+    name: "Status LED"
+    disabled_by_default: true
+    pin:
+      number: GPIO0
+      inverted: true
+
+  # Button LED
+  - platform: monochromatic
+    name: "LED"
+    disabled_by_default: true
+    id: led1
+    output: button_led1
+    default_transition_length: 500ms
+
+switch:
+  - platform: output
+    name: "Relay"
+    id: relay_sw
+    output: relay1
+    on_turn_on:
+      - light.turn_on: led1
+    on_turn_off:
+      - light.turn_off: led1
+
+  - platform: template
+    name: Detach Relay
+    id: detach_relay
+    entity_category: config
+    optimistic: true
+    restore_mode: RESTORE_DEFAULT_OFF

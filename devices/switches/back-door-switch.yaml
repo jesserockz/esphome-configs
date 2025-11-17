@@ -1,0 +1,12 @@
+---
+substitutions:
+  name: back-door-switch
+  friendly_name: Back Door Switch
+  wifi_reboot_timeout: 5min
+  light_name: Back Door
+
+packages:
+  switch: !include ../../templates/athom/athom-sw01.yaml
+
+logger:
+  baud_rate: 0

@@ -1,0 +1,13 @@
+---
+substitutions:
+  name: lounge-switch
+  friendly_name: Lounge Switch
+  ip: "10.6.6.155"
+  wifi_reboot_timeout: 0s
+
+packages:
+  common: !include ../../common/platforms/common-esp8266.yaml
+  wifi: !include ../../common/wifi.yaml
+  zemismart: !include ../../templates/zemismart/3gang.yaml
+
+  wizmote: !include ../../templates/other/wizmote.yaml

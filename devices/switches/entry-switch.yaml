@@ -1,0 +1,7 @@
+---
+substitutions:
+  name: entry-switch
+  friendly_name: Entry Switch
+
+packages:
+  switch: !include ../../templates/athom/athom-sw02.yaml

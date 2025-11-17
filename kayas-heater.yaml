@@ -1,9 +1,0 @@
----
-substitutions:
-  name: kayas-heater
-  friendly_name: Kaya's Heater
-  ip: '10.6.6.188'
-  wifi_reboot_timeout: 0s
-
-packages:
-  heater: !include modules/devices/arlec-heater-white.yaml
