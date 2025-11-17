@@ -8,6 +8,7 @@ wifi:
     - ssid: !secret wifi_ssid
       password: !secret wifi_password
       hidden: $wifi_hidden
+  min_auth_mode: WPA2
   reboot_timeout: $wifi_reboot_timeout
   ap:
     password: !secret ap_password

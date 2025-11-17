@@ -3,7 +3,7 @@ substitutions:
   climate_name: ${friendly_name}
 
 external_components:
-  source: github://DomiStyle/esphome-panasonic-ac
+  source: github://jesserockz/esphome-panasonic-ac@jesserockz-2025-516
   components: [panasonic_ac]
 
 uart:

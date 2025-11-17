@@ -22,6 +22,8 @@ time:
     id: sntp_time
     servers:
       - !secret sntp_server
+  - platform: homeassistant
+    id: homeassistant_time
 
 sensor: !include_dir_list ../sensors
 binary_sensor: !include_dir_list ../binary_sensors
