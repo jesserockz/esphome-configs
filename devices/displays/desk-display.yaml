@@ -1,0 +1,163 @@
+---
+substitutions:
+  name: desk-display
+  friendly_name: Desk Display
+  wifi_reboot_timeout: 15min
+
+packages:
+  common: !include ../../common/platforms/common-esp32.yaml
+  wifi: !include ../../common/wifi.yaml
+
+logger:
+  level: INFO
+  # level: VERY_VERBOSE
+
+wifi:
+  power_save_mode: none  # maybe to help with led flickering?
+
+api:
+  services:
+    - service: notify
+      variables:
+        message: string
+        type: int
+      then:
+        - text.set:
+            id: notification_text
+            value: !lambda return message;
+        - display.page.show: notification
+        - delay: 1s
+        - lambda: |-
+            int x_offset, baseline, width, height;
+            id(font_8bithud)->measure(id(notification_text).state.c_str(), &width,
+                                      &x_offset, &baseline, &height);
+            id(text_width) = width;
+        - repeat:
+            count: !lambda "return id(text_width) - 16;"
+            then:
+              - globals.set:
+                  id: scroller_position
+                  value: !lambda "return id(scroller_position) - 1;"
+              - delay: 100ms
+        - display.page.show: clock_page
+        - text.set:
+            id: notification_text
+            value: ""
+        - globals.set:
+            id: scroller_position
+            value: "0"
+
+globals:
+  - id: scroller_position
+    type: int32_t
+    restore_value: false
+    initial_value: "0"
+  - id: text_width
+    type: uint32_t
+    restore_value: false
+    initial_value: "0"
+
+light:
+  - platform: esp32_rmt_led_strip
+    chipset: WS2812
+    pin: GPIO13
+    num_leds: 256
+    rgb_order: GRB
+    max_refresh_rate: 10ms
+
+    name: None
+    id: matrix
+    color_correct: [50%, 50%, 50%]
+    default_transition_length: 0s
+    restore_mode: ALWAYS_ON
+    effects:
+    #   - addressable_lambda:
+    #       name: Rainbow Left
+    #       lambda: |-
+    #         ESPHSVColor hsv;
+    #         hsv.value = 255;
+    #         hsv.saturation = 240;
+    #         uint16_t hue = (millis() * 10) % 0xFFFF;
+    #         const uint16_t add = 0xFFFF / 32;
+    #         for (size_t i=0; i < it.size(); i += 8) {
+    #           hsv.hue = hue >> 8;
+    #           it.range(i, i+8) = hsv;
+    #           hue += add;
+    #         }
+    #   - addressable_lambda:
+    #       name: Rainbow Right
+    #       lambda: |-
+    #         ESPHSVColor hsv;
+    #         hsv.value = 255;
+    #         hsv.saturation = 240;
+    #         uint16_t hue = (millis() * 10) % 0xFFFF;
+    #         const uint16_t add = 0xFFFF / 32;
+    #         for (size_t i=it.size() - 8; i < it.size(); i += 8) {
+    #           hsv.hue = hue >> 8;
+    #           it.range(i, i+8) = hsv;
+    #           hue += add;
+    #         }
+
+display:
+  - platform: addressable_light
+    id: display_entity
+    addressable_light_id: matrix
+    width: 32
+    height: 8
+    update_interval: 16ms
+
+    pixel_mapper: |-
+      if (x % 2 == 0) {
+        return (x * 8) + y;
+      }
+      return (x * 8) + (7 - y);
+
+    pages:
+      - id: clock_page
+        # yamllint disable rule:line-length
+        lambda: |-
+
+          auto light_color = id(matrix).current_values;
+          Color color(light_color.get_red() * 255, light_color.get_green() * 255,
+                      light_color.get_blue() * 255);
+
+          it.strftime(15, 0, id(font_8bithud),  color, TextAlign::RIGHT, "%H",
+                      id(sntp_time).now());
+          it.print(15, 0, id(font_8bithud), color, ((millis()/1000)%2==0)?":":" ");
+          it.strftime(18, 0, id(font_8bithud),  color, TextAlign::LEFT, "%M",
+                      id(sntp_time).now());
+        # yamllint enable rule:line-length
+
+      - id: notification
+        lambda: |-
+          auto light_color = id(matrix).current_values;
+          Color color(light_color.get_red() * 255, light_color.get_green() * 255,
+                      light_color.get_blue() * 255);
+
+          it.print(id(scroller_position), 0, id(font_8bithud),
+                   color, id(notification_text).state.c_str());
+
+font:
+  - id: font_8bithud
+    file: fonts/8-bit-hud2.ttf
+    size: 5
+    # yamllint disable-line rule:line-length
+    glyphs: '!"%()+,-_.:*=?~#0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz'
+
+switch:
+  - platform: template
+    name: "Display On"
+    id: display_on
+    restore_mode: ALWAYS_ON
+    setup_priority: 100
+    lambda: return id(display_entity).get_enabled();
+    turn_on_action:
+      - lambda: id(display_entity).set_enabled(true);
+    turn_off_action:
+      - lambda: id(display_entity).set_enabled(false);
+
+text:
+  - platform: template
+    id: notification_text
+    optimistic: true
+    mode: text

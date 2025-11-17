@@ -1,0 +1,27 @@
+---
+substitutions:
+  light_name: ${friendly_name}
+  restore_mode: RESTORE_DEFAULT_ON
+
+packages:
+  common: !include ../../common/platforms/common-esp8266.yaml
+
+output:
+  - platform: esp8266_pwm
+    id: cold_output
+    pin: GPIO5
+    max_power: 80%
+  - platform: esp8266_pwm
+    id: warm_output
+    pin: GPIO12
+    max_power: 80%
+
+light:
+  - platform: cwww
+    name: ${light_name}
+    restore_mode: ${restore_mode}
+    cold_white: cold_output
+    warm_white: warm_output
+    cold_white_color_temperature: 153 mireds
+    warm_white_color_temperature: 500 mireds
+    default_transition_length: 200ms

@@ -1,0 +1,49 @@
+---
+substitutions:
+  name: light-bar
+  friendly_name: Light Bar
+  ip: '10.6.6.101'
+
+packages:
+  common: !include ../../common/platforms/common-esp8266.yaml
+  wifi: !include ../../common/wifi.yaml
+
+logger:
+  baud_rate: 0
+
+binary_sensor:
+  - platform: gpio
+    pin:
+      number: 5
+      mode: INPUT_PULLUP
+      inverted: true
+    name: Power Button
+  - platform: gpio
+    pin:
+      number: 4
+      mode: INPUT_PULLUP
+      inverted: true
+    name: Light Button
+  - platform: gpio
+    pin:
+      number: 13
+      mode: INPUT_PULLUP
+      inverted: true
+    name: Mic Button
+
+# sensor:
+#   - platform: adc
+#     pin: A0
+#     name: "Noise Level"
+#     update_interval: 1s
+
+light:
+  - platform: neopixelbus
+    num_leds: 30
+    pin: 1
+    variant: ws2812
+    name: "Light"
+    default_transition_length: 100ms
+    type: BRG
+    effects:
+      - addressable_rainbow:

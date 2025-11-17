@@ -1,0 +1,32 @@
+---
+substitutions:
+  name: m5stack-dial-1
+  friendly_name: M5Stack Dial 1
+
+packages:
+  m5dial: !include ../../templates/m5stack/m5stack-dial.yaml
+
+rc522_i2c:
+  - id: !extend nfc_reader
+    on_tag:
+      - rtttl.play: "beep:d=4,o=5,b=160:16c6,16g6,16c7"
+
+sensor:
+  - id: !extend encoder
+    on_clockwise:
+      - logger.log: "Clockwise"
+    on_anticlockwise:
+      - logger.log: "Anti Clockwise"
+
+display:
+  - id: !extend round_display
+    show_test_card: true
+
+light:
+  - id: !extend display_backlight
+    restore_mode: ALWAYS_ON
+
+i2c:
+  - id: external_i2c  # Red port
+    sda: GPIO13
+    scl: GPIO15

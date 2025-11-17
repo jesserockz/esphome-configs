@@ -1,7 +1,0 @@
----
-substitutions:
-  name: garage-fridge-plug
-  friendly_name: Garage Fridge Plug
-
-packages:
-  common: !include modules/devices/athom-smart-plug-v2.yaml

@@ -1,0 +1,9 @@
+---
+substitutions:
+  name: hallway-light-1
+  friendly_name: Hallway Light 1
+  light_name: Hallway 1
+  ip: '10.6.6.159'
+
+packages:
+  common: !include ../../templates/athom/athom-rgbww-light.yaml

@@ -1,0 +1,11 @@
+---
+substitutions:
+  name: dining-switch
+  friendly_name: Dining Switch
+  ip: "10.6.6.174"
+  wifi_reboot_timeout: 0s
+
+packages:
+  common: !include ../../common/platforms/common-esp8266.yaml
+  wifi: !include ../../common/wifi.yaml
+  zemismart: !include ../../templates/zemismart/3gang.yaml

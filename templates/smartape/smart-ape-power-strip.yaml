@@ -1,0 +1,124 @@
+---
+substitutions:
+  board: esp8285
+  relay_1_restore_mode: RESTORE_DEFAULT_OFF
+  relay_2_restore_mode: RESTORE_DEFAULT_OFF
+  relay_3_restore_mode: RESTORE_DEFAULT_OFF
+  relay_usb_restore_mode: RESTORE_DEFAULT_OFF
+
+packages:
+  common: !include ../../common/platforms/common-esp8266.yaml
+  wifi: !include ../../common/wifi.yaml
+
+logger:
+  baud_rate: 0
+
+# USB relay GPIO15
+# Plug 1 GPIO13
+# Plug 2 GPIO14
+# Plug 3 GPIO3
+
+# BL0937 CF GPIO4
+# BL0937 CF1 GPIO5
+# BL0937 SEL GPIO12
+
+# Button GPIO0
+# WiFi LED - GPIO1
+
+binary_sensor:
+  - platform: gpio
+    pin:
+      number: 0
+      inverted: true
+    name: "Power Button"
+    disabled_by_default: true
+    on_multi_click:
+      - timing:
+          - ON for at most 0.5s
+          - OFF for at least 0.5s
+        then:
+          - switch.toggle: relay_usb
+      - timing:
+          - ON for at most 0.5s
+          - OFF for at most 0.5s
+          - ON for at most 0.5s
+          - OFF for at least 0.5s
+        then:
+          - switch.toggle: relay_1
+      - timing:
+          - ON for at most 0.5s
+          - OFF for at most 0.5s
+          - ON for at most 0.5s
+          - OFF for at most 0.5s
+          - ON for at most 0.5s
+          - OFF for at least 0.5s
+        then:
+          - switch.toggle: relay_2
+      - timing:
+          - ON for at most 0.5s
+          - OFF for at most 0.5s
+          - ON for at most 0.5s
+          - OFF for at most 0.5s
+          - ON for at most 0.5s
+          - OFF for at most 0.5s
+          - ON for at most 0.5s
+          - OFF for at least 0.2s
+        then:
+          - switch.toggle: relay_3
+      - timing:
+          - ON for at least 4s
+        then:
+          - button.press: restart_button
+
+sensor:
+  - platform: hlw8012
+    model: BL0937
+    cf_pin: GPIO4
+    cf1_pin: GPIO5
+    sel_pin:
+      number: GPIO12
+      inverted: true
+    voltage_divider: 1618
+    # 997 downstream
+    # 730k + 730k + 470k upstream
+    update_interval: 2s
+    initial_mode: voltage
+    change_mode_every: 4
+    voltage:
+      name: "Voltage"
+    current:
+      name: "Current"
+    power:
+      name: "Power"
+    energy:
+      name: "Energy"
+
+switch:
+  - platform: gpio
+    name: "1"
+    pin: GPIO13
+    restore_mode: ${relay_1_restore_mode}
+    id: relay_1
+  - platform: gpio
+    name: "2"
+    pin: GPIO14
+    restore_mode: ${relay_2_restore_mode}
+    id: relay_2
+  - platform: gpio
+    name: "3"
+    pin: GPIO3
+    restore_mode: ${relay_3_restore_mode}
+    id: relay_3
+
+  - platform: gpio
+    name: "USB"
+    pin: GPIO15
+    restore_mode: ${relay_usb_restore_mode}
+    id: relay_usb
+
+light:
+  - platform: status_led
+    name: "Status LED"
+    pin:
+      number: GPIO1
+      inverted: true

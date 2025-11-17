@@ -1,0 +1,10 @@
+---
+substitutions:
+  name: dining-light
+  friendly_name: Dining Light
+  ip: '10.6.6.130'
+  wifi_reboot_timeout: 0s
+  light_name: Dining
+
+packages:
+  light: !include ../../templates/athom/athom-rgbct-light.yaml

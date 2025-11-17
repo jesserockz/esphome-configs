@@ -1,0 +1,9 @@
+---
+substitutions:
+  name: washing-machine-plug
+  friendly_name: Washing Machine Plug
+  restore_mode: ALWAYS_ON
+  zero_power_below: "5"
+
+packages:
+  common: !include ../../templates/athom/athom-smart-plug-v2.yaml

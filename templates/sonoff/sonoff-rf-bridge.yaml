@@ -1,0 +1,97 @@
+---
+packages:
+  common: !include ../../common/platforms/common-esp8266.yaml
+  wifi: !include ../../common/wifi.yaml
+
+api:
+  services:
+    - service: send_rf_code
+      variables:
+        sync: int
+        low: int
+        high: int
+        code: int
+      then:
+        - rf_bridge.send_code:
+            sync: !lambda 'return sync;'
+            low: !lambda 'return low;'
+            high: !lambda 'return high;'
+            code: !lambda 'return code;'
+    - service: send_advanced_code
+      variables:
+        length: int
+        protocol: int
+        code: string
+      then:
+        - rf_bridge.send_advanced_code:
+            length: !lambda 'return length;'
+            protocol: !lambda 'return protocol;'
+            code: !lambda 'return code;'
+    - service: learn
+      then:
+        - rf_bridge.learn
+    - service: start_advanced
+      then:
+        - rf_bridge.start_advanced_sniffing
+    - service: stop_advanced
+      then:
+        - rf_bridge.stop_advanced_sniffing
+    - service: send_raw
+      variables:
+        raw: string
+      then:
+        - rf_bridge.send_raw:
+            raw: !lambda 'return raw;'
+
+logger:
+  baud_rate: 0  # disable UART logging so we don't send garbage to efm8
+  # level: VERY_VERBOSE
+
+uart:
+  id: txrx
+  tx_pin: GPIO1
+  rx_pin: GPIO3
+  baud_rate: 19200
+
+rf_bridge:
+  uart_id: txrx
+  on_code_received:
+    then:
+      - homeassistant.event:
+          event: esphome.rf_code_received
+          data:
+            sync: !lambda 'return format_hex(data.sync);'
+            low: !lambda 'return format_hex(data.low);'
+            high: !lambda 'return format_hex(data.high);'
+            code: !lambda 'return format_hex(data.code);'
+  on_advanced_code_received:
+    then:
+      - homeassistant.event:
+          event: esphome.rf_advanced_code_received
+          data:
+            length: !lambda 'char buffer [10];return itoa(data.length,buffer,16);'
+            protocol: !lambda 'char buffer [10];return itoa(data.protocol,buffer,16);'
+            code: !lambda 'return data.code;'
+
+light:
+  - platform: status_led
+    name: Status LED
+    disabled_by_default: true
+    pin:
+      number: GPIO13
+      inverted: true
+
+switch:
+  - platform: template
+    name: 'Advanced Sniffing'
+    optimistic: true
+    turn_on_action:
+      - rf_bridge.start_advanced_sniffing
+    turn_off_action:
+      - rf_bridge.stop_advanced_sniffing
+
+button:
+  - platform: template
+    name: 'Learn'
+    on_press:
+      - rf_bridge.learn

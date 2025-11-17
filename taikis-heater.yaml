@@ -1,8 +1,0 @@
----
-substitutions:
-  name: taikis-heater
-  friendly_name: Taiki's Heater
-  wifi_reboot_timeout: 0s
-
-packages:
-  heater: !include modules/devices/arlec-heater-white.yaml
