@@ -1,0 +1,5 @@
+binary_sensor:
+  - id: !extend button_${number}
+    on_press:
+      - lambda: |-
+          id(ledstrip_output).get(${number - 1}) = Color::WHITE;

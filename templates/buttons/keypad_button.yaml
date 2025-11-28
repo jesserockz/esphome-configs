@@ -1,0 +1,59 @@
+---
+defaults:
+  button_hold: "2s"
+  internal: true
+  number: ${ord(key) - 64}
+
+binary_sensor:
+  - platform: matrix_keypad
+    key: ${key}
+    id: button_${number}
+    name: Button ${number}
+    internal: ${internal}
+    disabled_by_default: true
+    on_multi_click:
+      - timing:
+          - ON for at most 0.5s
+          - OFF for at least 0.5s
+        then:
+          - event.trigger:
+              id: event_button_${number}
+              event_type: click
+      - timing:
+          - ON for at most 0.5s
+          - OFF for at most 0.5s
+          - ON for at most 0.5s
+          - OFF for at least 0.5s
+        then:
+          - event.trigger:
+              id: event_button_${number}
+              event_type: double_click
+      - timing:
+          - ON for at most 0.5s
+          - OFF for at most 0.5s
+          - ON for at most 0.5s
+          - OFF for at most 0.5s
+          - ON for at most 0.5s
+          - OFF for at most 0.5s
+          - ON for at most 0.5s
+          - OFF for at least 0.2s
+        then:
+          - event.trigger:
+              id: event_button_${number}
+              event_type: four_clicks
+      - timing:
+          - "ON for at least ${button_hold}"
+        then:
+          - event.trigger:
+              id: event_button_${number}
+              event_type: hold
+
+event:
+  - platform: template
+    name: Button ${number}
+    id: event_button_${number}
+    event_types:
+      - click
+      - double_click
+      - four_clicks
+      - hold

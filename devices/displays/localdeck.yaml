@@ -1,0 +1,131 @@
+substitutions:
+  name: localdeck
+  friendly_name: LocalDeck
+
+packages:
+  - !include ../../common/platforms/common-esp32c3.yaml
+  - !include ../../common/wifi.yaml
+  - !include {file: ../../templates/buttons/keypad_button.yaml, vars: {key: "A"}}
+  - !include {file: ../../templates/buttons/keypad_button.yaml, vars: {key: "B"}}
+  - !include {file: ../../templates/buttons/keypad_button.yaml, vars: {key: "C"}}
+  - !include {file: ../../templates/buttons/keypad_button.yaml, vars: {key: "D"}}
+  - !include {file: ../../templates/buttons/keypad_button.yaml, vars: {key: "E"}}
+  - !include {file: ../../templates/buttons/keypad_button.yaml, vars: {key: "F"}}
+  - !include {file: ../../templates/buttons/keypad_button.yaml, vars: {key: "G"}}
+  - !include {file: ../../templates/buttons/keypad_button.yaml, vars: {key: "H"}}
+  - !include {file: ../../templates/buttons/keypad_button.yaml, vars: {key: "I"}}
+  - !include {file: ../../templates/buttons/keypad_button.yaml, vars: {key: "J"}}
+  - !include {file: ../../templates/buttons/keypad_button.yaml, vars: {key: "K"}}
+  - !include {file: ../../templates/buttons/keypad_button.yaml, vars: {key: "L"}}
+  - !include {file: ../../templates/buttons/keypad_button.yaml, vars: {key: "M"}}
+  - !include {file: ../../templates/buttons/keypad_button.yaml, vars: {key: "N"}}
+  - !include {file: ../../templates/buttons/keypad_button.yaml, vars: {key: "O"}}
+  - !include {file: ../../templates/buttons/keypad_button.yaml, vars: {key: "P"}}
+  - !include {file: ../../templates/buttons/keypad_button.yaml, vars: {key: "Q"}}
+  - !include {file: ../../templates/buttons/keypad_button.yaml, vars: {key: "R"}}
+  - !include {file: ../../templates/buttons/keypad_button.yaml, vars: {key: "S"}}
+  - !include {file: ../../templates/buttons/keypad_button.yaml, vars: {key: "T"}}
+  - !include {file: ../../templates/buttons/keypad_button.yaml, vars: {key: "U"}}
+  - !include {file: ../../templates/buttons/keypad_button.yaml, vars: {key: "V"}}
+  - !include {file: ../../templates/buttons/keypad_button.yaml, vars: {key: "W"}}
+  - !include {file: ../../templates/buttons/keypad_button.yaml, vars: {key: "X"}}
+
+  # 24 leds
+  - !include {file: ../../templates/localdeck/light-blink.yaml, vars: {number: 1}}
+  - !include {file: ../../templates/localdeck/light-blink.yaml, vars: {number: 2}}
+  - !include {file: ../../templates/localdeck/light-blink.yaml, vars: {number: 3}}
+  - !include {file: ../../templates/localdeck/light-blink.yaml, vars: {number: 4}}
+  - !include {file: ../../templates/localdeck/light-blink.yaml, vars: {number: 5}}
+  - !include {file: ../../templates/localdeck/light-blink.yaml, vars: {number: 6}}
+  - !include {file: ../../templates/localdeck/light-blink.yaml, vars: {number: 7}}
+  - !include {file: ../../templates/localdeck/light-blink.yaml, vars: {number: 8}}
+  - !include {file: ../../templates/localdeck/light-blink.yaml, vars: {number: 9}}
+  - !include {file: ../../templates/localdeck/light-blink.yaml, vars: {number: 10}}
+  - !include {file: ../../templates/localdeck/light-blink.yaml, vars: {number: 11}}
+  - !include {file: ../../templates/localdeck/light-blink.yaml, vars: {number: 12}}
+  - !include {file: ../../templates/localdeck/light-blink.yaml, vars: {number: 13}}
+  - !include {file: ../../templates/localdeck/light-blink.yaml, vars: {number: 14}}
+  - !include {file: ../../templates/localdeck/light-blink.yaml, vars: {number: 15}}
+  - !include {file: ../../templates/localdeck/light-blink.yaml, vars: {number: 16}}
+  - !include {file: ../../templates/localdeck/light-blink.yaml, vars: {number: 17}}
+  - !include {file: ../../templates/localdeck/light-blink.yaml, vars: {number: 18}}
+  - !include {file: ../../templates/localdeck/light-blink.yaml, vars: {number: 19}}
+  - !include {file: ../../templates/localdeck/light-blink.yaml, vars: {number: 20}}
+  - !include {file: ../../templates/localdeck/light-blink.yaml, vars: {number: 21}}
+  - !include {file: ../../templates/localdeck/light-blink.yaml, vars: {number: 22}}
+  - !include {file: ../../templates/localdeck/light-blink.yaml, vars: {number: 23}}
+  - !include {file: ../../templates/localdeck/light-blink.yaml, vars: {number: 24}}
+
+light:
+  - platform: esp32_rmt_led_strip
+    # name: None
+    id: raw_ledstrip
+    rgb_order: GRB
+    color_correct: [100%, 100%, 100%]
+    gamma_correct: 1.0
+    pin:
+      number: GPIO8
+      ignore_strapping_warning: true
+    num_leds: 24
+    chipset: SK6812
+
+  - platform: partition
+    id: ledstrip
+    output_id: ledstrip_output
+    color_correct: [100%, 100%, 100%]
+    gamma_correct: 1.0
+    segments:
+      - id: raw_ledstrip
+        from: 18
+        to: 23
+      - id: raw_ledstrip
+        from: 12
+        to: 17
+      - id: raw_ledstrip
+        from: 6
+        to: 11
+      - id: raw_ledstrip
+        from: 0
+        to: 5
+    restore_mode: RESTORE_AND_OFF
+    effects:
+      - addressable_lambda:
+          name: Keypad
+          update_interval: 25ms
+          lambda: |-
+            it.all().darken(15);
+
+
+esphome:
+  on_boot:
+    - light.turn_on:
+        id: ledstrip
+        effect: Keypad
+
+matrix_keypad:
+  id: keypad
+  keys: ABCDEFGHIJKLMNOPQRSTUVWX
+  rows:
+    - pin: GPIO7
+    - pin: GPIO3
+    - pin: GPIO20
+    - pin: GPIO21
+  columns:
+    - pin:
+        number: GPIO0
+        drive_strength: 5mA
+    - pin:
+        number: GPIO1
+        drive_strength: 5mA
+    - pin:
+        number: GPIO10
+        drive_strength: 5mA
+    - pin:
+        number: GPIO4
+        drive_strength: 5mA
+    - pin:
+        number: GPIO5
+        drive_strength: 5mA
+    - pin:
+        number: GPIO6
+        drive_strength: 5mA
