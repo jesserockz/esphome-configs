@@ -2,3 +2,5 @@
 platform: uptime
 name: "Uptime"
 id: uptime_sensor
+type: timestamp
+time_id: homeassistant_time

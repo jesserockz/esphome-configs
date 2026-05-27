@@ -3,6 +3,7 @@ esp32:
   variant: esp32c6
   framework:
     type: esp-idf
+  toolchain: esp-idf
 
 packages:
   - !include common-base.yaml
