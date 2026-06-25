@@ -1,3 +1,4 @@
+---
 binary_sensor:
   - id: !extend button_${number}
     on_press:

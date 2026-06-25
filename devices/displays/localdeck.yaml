@@ -1,3 +1,4 @@
+---
 substitutions:
   name: localdeck
   friendly_name: LocalDeck
@@ -94,7 +95,6 @@ light:
           update_interval: 25ms
           lambda: |-
             it.all().darken(15);
-
 
 esphome:
   on_boot:
